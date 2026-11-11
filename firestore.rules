@@ -85,7 +85,9 @@ service cloud.firestore {
         && (!('gradYear' in d) || d.gradYear == null || (d.gradYear is int && d.gradYear >= 1950 && d.gradYear <= 2040));
     }
     function validAlumni(d) {
-      return d.keys().hasOnly(['name', 'gradYear', 'sport', 'program', 'company', 'role', 'industry', 'city', 'linkedin', 'email', 'mentor', 'bio', 'updatedAt'])
+      return d.keys().hasOnly(['name', 'gradYear', 'sport', 'program', 'company', 'role', 'industry', 'city', 'linkedin', 'email', 'mentor', 'bio', 'photo', 'updatedAt'])
+        && (!('photo' in d) || d.photo == ''
+            || (d.photo is string && d.photo.size() <= 200000 && d.photo.matches('data:image/jpeg;base64,[A-Za-z0-9+/=]+')))
         && d.name is string && d.name.size() > 0 && d.name.size() <= 80
         && (!('gradYear' in d) || d.gradYear == null || d.gradYear is int)
         && validText(d, 'sport', 60) && validText(d, 'program', 80) && validText(d, 'company', 80)
@@ -106,17 +108,20 @@ service cloud.firestore {
         && request.resource.data.status == 'pending'
         && request.resource.data.email == request.auth.token.email
         && validUserFields(request.resource.data);
+      // Grad year decides member vs alum, so only admins can change it after sign-up
       allow update: if isAdmin()
         || (request.auth != null && request.auth.uid == uid
-            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'type', 'gradYear'])
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name'])
             && validUserFields(request.resource.data));
       allow delete: if isAdmin();
     }
 
     match /alumni/{uid} {
       allow read: if isApproved();
+      // Only graduates (grad year this year or earlier) can list themselves; admins can add anyone
       allow create, update: if validAlumni(request.resource.data)
-        && (isAdmin() || (isApproved() && request.auth.uid == uid));
+        && (isAdmin() || (isApproved() && request.auth.uid == uid
+            && myUser().gradYear is int && myUser().gradYear <= request.time.year()));
       allow delete: if isAdmin() || (request.auth != null && request.auth.uid == uid);
     }
 
