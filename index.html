@@ -196,6 +196,12 @@ section{padding:110px 0}
 .team li{line-height:1.3}
 .team li b{display:block;color:var(--ink);font-weight:600}
 .team li small{font-size:.85rem;color:var(--muted)}
+.leader .ph{overflow:hidden}
+.leader .ph img{width:100%;height:100%;object-fit:cover}
+.team li{display:flex;align-items:center;gap:12px}
+.team li>span{min-width:0}
+.av{flex:none;width:46px;height:46px;border-radius:50%;object-fit:cover;background:var(--cream)}
+.av.ini{display:grid;place-items:center;background:var(--red);color:#fff;font-family:var(--serif);font-weight:700;font-size:1rem;letter-spacing:.04em}
 @media (max-width:960px){.teams{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:640px){.leaders{grid-template-columns:1fr}.teams{grid-template-columns:1fr}}
 
@@ -472,31 +478,31 @@ footer{background:var(--black);color:rgba(255,255,255,.72)}
       <p class="lede reveal">A group of driven student leaders committed to bridging the gap between athletics and business.</p>
     </div>
     <div class="leaders">
-      <div class="leader reveal"><div class="ph" aria-hidden="true">WR</div><h3>Will Robinson</h3><span>Co-President</span></div>
-      <div class="leader reveal"><div class="ph" aria-hidden="true">AL</div><h3>Angus Logan</h3><span>Co-President</span></div>
-      <div class="leader reveal"><div class="ph" aria-hidden="true">ED</div><h3>Emilia Diaz-Ruiz</h3><span>Vice President</span></div>
+      <div class="leader reveal"><div class="ph"><img src="assets/team/will-robinson.jpg" alt="Will Robinson" width="480" height="480" loading="lazy"></div><h3>Will Robinson</h3><span>Co-President</span></div>
+      <div class="leader reveal"><div class="ph"><img src="assets/team/angus-logan.jpg" alt="Angus Logan" width="480" height="480" loading="lazy"></div><h3>Angus Logan</h3><span>Co-President</span></div>
+      <div class="leader reveal"><div class="ph"><img src="assets/team/emilia-diaz-ruiz.jpg" alt="Emilia Diaz-Ruiz" width="480" height="480" loading="lazy"></div><h3>Emilia Diaz-Ruiz</h3><span>Vice President</span></div>
     </div>
     <div class="teams reveal" style="background:var(--cream);padding:20px;gap:20px">
       <div class="team"><h4>Finance<span>04</span></h4><ul>
-        <li><b>Henry Jagger</b><small>VP Finance</small></li><li><b>Nicolas Huard</b><small>VP Finance</small></li>
-        <li><b>Elie Mcleay</b><small>Finance Associate</small></li><li><b>Micheal Zampardi</b><small>Finance Associate</small></li></ul></div>
+        <li><span class="av ini" aria-hidden="true">HJ</span><span><b>Henry Jagger</b><small>VP Finance</small></span></li><li><img class="av" src="assets/team/nicolas-huard.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Nicolas Huard</b><small>VP Finance</small></span></li>
+        <li><img class="av" src="assets/team/elie-mcleay.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Elie Mcleay</b><small>Finance Associate</small></span></li><li><img class="av" src="assets/team/micheal-zampardi.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Micheal Zampardi</b><small>Finance Associate</small></span></li></ul></div>
       <div class="team"><h4>Marketing<span>04</span></h4><ul>
-        <li><b>Katie Woolfenden</b><small>VP Marketing</small></li><li><b>Emma Sutton</b><small>Marketing Associate</small></li>
-        <li><b>Juju Woolfenden</b><small>Marketing Associate</small></li><li><b>Nat Wigle</b><small>Marketing Associate</small></li></ul></div>
+        <li><img class="av" src="assets/team/katie-woolfenden.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Katie Woolfenden</b><small>VP Marketing</small></span></li><li><img class="av" src="assets/team/emma-sutton.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Emma Sutton</b><small>Marketing Associate</small></span></li>
+        <li><img class="av" src="assets/team/juju-woolfenden.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Juju Woolfenden</b><small>Marketing Associate</small></span></li><li><img class="av" src="assets/team/nat-wigle.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Nat Wigle</b><small>Marketing Associate</small></span></li></ul></div>
       <div class="team"><h4>Logistics<span>04</span></h4><ul>
-        <li><b>Eddie Tackaberry</b><small>VP Logistics</small></li><li><b>Lennon Lazare</b><small>Logistics Associate</small></li>
-        <li><b>Davis Jessup</b><small>Logistics Associate</small></li><li><b>Lawrence Kang</b><small>Logistics Associate</small></li></ul></div>
+        <li><span class="av ini" aria-hidden="true">ET</span><span><b>Eddie Tackaberry</b><small>VP Logistics</small></span></li><li><img class="av" src="assets/team/lennon-lazare.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Lennon Lazare</b><small>Logistics Associate</small></span></li>
+        <li><img class="av" src="assets/team/davis-jessup.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Davis Jessup</b><small>Logistics Associate</small></span></li><li><span class="av ini" aria-hidden="true">LK</span><span><b>Lawrence Kang</b><small>Logistics Associate</small></span></li></ul></div>
       <div class="team"><h4>Corp. Relations<span>04</span></h4><ul>
-        <li><b>Yusuke Sato</b><small>VP Corporate Relations</small></li><li><b>Hudson Vendermeer</b><small>Corporate Relations Associate</small></li>
-        <li><b>Megan Kronwald</b><small>Corporate Relations Associate</small></li><li><b>Leila Hopkins</b><small>Corporate Relations Associate</small></li></ul></div>
+        <li><img class="av" src="assets/team/yusuke-sato.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Yusuke Sato</b><small>VP Corporate Relations</small></span></li><li><img class="av" src="assets/team/hudson-vendermeer.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Hudson Vendermeer</b><small>Corporate Relations Associate</small></span></li>
+        <li><img class="av" src="assets/team/megan-kronwald.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Megan Kronwald</b><small>Corporate Relations Associate</small></span></li><li><img class="av" src="assets/team/leila-hopkins.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Leila Hopkins</b><small>Corporate Relations Associate</small></span></li></ul></div>
       <div class="team"><h4>Events<span>03</span></h4><ul>
-        <li><b>Tyler Colwill</b><small>VP Events</small></li><li><b>Finnegan Murphy</b><small>Events Associate</small></li>
-        <li><b>Tyler Miocevich</b><small>Events Associate</small></li></ul></div>
+        <li><img class="av" src="assets/team/tyler-colwill.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Tyler Colwill</b><small>VP Events</small></span></li><li><img class="av" src="assets/team/finnegan-murphy.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Finnegan Murphy</b><small>Events Associate</small></span></li>
+        <li><img class="av" src="assets/team/tyler-miocevich.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Tyler Miocevich</b><small>Events Associate</small></span></li></ul></div>
       <div class="team"><h4>Engagement<span>03</span></h4><ul>
-        <li><b>Jordan Persia</b><small>VP Engagement</small></li><li><b>Charlou Chatila</b><small>Engagement Associate</small></li>
-        <li><b>Dan Abou-Chakra</b><small>Engagement Associate</small></li></ul></div>
+        <li><img class="av" src="assets/team/jordan-persia.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Jordan Persia</b><small>VP Engagement</small></span></li><li><span class="av ini" aria-hidden="true">CC</span><span><b>Charlou Chatila</b><small>Engagement Associate</small></span></li>
+        <li><span class="av ini" aria-hidden="true">DA</span><span><b>Dan Abou-Chakra</b><small>Engagement Associate</small></span></li></ul></div>
       <div class="team"><h4>External<span>01</span></h4><ul>
-        <li><b>Justine Chatila</b><small>External Associate</small></li></ul></div>
+        <li><img class="av" src="assets/team/justine-chatila.jpg" alt="" width="96" height="96" loading="lazy"><span><b>Justine Chatila</b><small>External Associate</small></span></li></ul></div>
     </div>
   </div>
 </section>
