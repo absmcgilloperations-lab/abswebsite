@@ -208,6 +208,11 @@ section{padding:110px 0}
 .card .role{font-size:.88rem;color:var(--muted);line-height:1.45}
 .card p.desc{font-size:.94rem}
 @media (max-width:1000px){.events-grid{grid-template-columns:1fr}}
+.event-photo{margin:clamp(36px,5vw,56px) 0 0;position:relative;border-radius:var(--r-lg);overflow:hidden;background:var(--cream)}
+.event-photo img{width:100%;height:auto;display:block}
+.event-photo figcaption{position:absolute;left:16px;bottom:16px;right:16px;max-width:max-content;background:rgba(11,11,12,.72);color:rgba(255,255,255,.9);font-size:.92rem;padding:10px 16px;border-radius:var(--pill);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.event-photo figcaption b{color:#fff;font-weight:600}
+@media (max-width:600px){.event-photo figcaption{position:static;max-width:none;border-radius:0;background:var(--ink)}}
 @media (max-width:760px){.cards{grid-template-columns:1fr}}
 
 /* Team: filter chips + expandable member cards */
@@ -500,7 +505,7 @@ footer{background:var(--black);color:rgba(255,255,255,.72);border-radius:var(--r
     </div>
     <div class="cards">
       <article class="card reveal">
-        <div class="img" role="img" aria-label="Speaker presenting to an audience" style="background-image:url('https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=70')"></div>
+        <div class="img" role="img" aria-label="Tim Laurie presenting to ABS members in a McGill classroom" style="background-image:url('assets/events/tim-laurie-talk.jpg')"></div>
         <div class="body">
           <h3>Tim Laurie, CFA</h3>
           <span class="date">Fall 2026</span>
@@ -527,6 +532,12 @@ footer{background:var(--black);color:rgba(255,255,255,.72);border-radius:var(--r
         </div>
       </article>
     </div>
+  </div>
+  <div class="container">
+    <figure class="event-photo reveal">
+      <img src="assets/events/tim-laurie-group.jpg" alt="Tim Laurie, CFA, standing with ten ABS members after his talk" width="1400" height="788" loading="lazy">
+      <figcaption><b>Tim Laurie, CFA</b> with ABS members after his Fall 2026 talk</figcaption>
+    </figure>
   </div>
 </section>
 
