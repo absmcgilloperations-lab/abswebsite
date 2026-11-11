@@ -10,8 +10,8 @@ The club website: a single static page with no build step.
 Each section in `index.html` starts with a comment (`<!-- EVENTS -->`, `<!-- TEAM -->`, and so on). Edit the text there.
 
 - **New event:** copy one `<article class="card">` block in the Events section.
-- **Placements:** each `<div class="place">` is one role. `data-r` sets the filter: `qc` (Montréal), `ca` (rest of Canada), `us` or `intl`. Update the counts on the filter buttons to match.
-- **Team:** edit the `leaders` and `teams` blocks each year.
+- **Company strip:** the scrolling list near the bottom (`<!-- COMPANIES -->`). Each company appears twice, once plain and once with `aria-hidden="true"`, so the loop is seamless. Add or remove a name in both places.
+- **Team:** edit `team.js`. Each person has a name, role, portfolio, photo, and optional `email` and `linkedin`. Headshots go in `assets/team/` as 480×480 squares. People without a photo show red initials.
 
 ## Hosting
 
