@@ -113,6 +113,7 @@ section{padding:110px 0}
 .split .photo::after{content:"";position:absolute;inset:auto -18px -18px auto;width:45%;height:45%;border:2px solid var(--red);z-index:-1}
 .split .copy p+p{margin-top:16px}
 .split .copy .btn{margin-top:30px}
+.split .photo.wide{aspect-ratio:3/2}
 @media (max-width:860px){.split{grid-template-columns:1fr}.split .photo{aspect-ratio:16/11}.split .photo::after{display:none}}
 
 /* Pillars */
@@ -281,7 +282,7 @@ footer{background:var(--black);color:rgba(255,255,255,.72)}
 <!-- ABOUT -->
 <section id="about">
   <div class="container split">
-    <div class="photo reveal" role="img" aria-label="A student planning ideas on a wall of sticky notes" style="background-image:url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=70')"></div>
+    <div class="photo reveal" role="img" aria-label="Three ABS executives in suits on a Montréal street in autumn" style="background-image:url('assets/about-exec.jpg');background-position:center 30%"></div>
     <div class="copy reveal">
       <span class="eyebrow">About ABS</span>
       <h2 class="title">Leadership<br>beyond sport</h2>
@@ -373,7 +374,7 @@ footer{background:var(--black);color:rgba(255,255,255,.72)}
 <!-- PURPOSE -->
 <section class="cream purpose">
   <div class="container split">
-    <div class="photo reveal" role="img" aria-label="A group meeting around a table" style="background-image:url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=70')"></div>
+    <div class="photo wide reveal" role="img" aria-label="Four ABS executives in black blazers in front of autumn trees" style="background-image:url('assets/purpose-exec.jpg')"></div>
     <div class="copy reveal">
       <span class="eyebrow">Our Purpose</span>
       <h2 class="title">Beyond the game</h2>
