@@ -137,6 +137,7 @@ input:disabled{background:var(--cream);color:var(--muted)}
     <div class="top-right">
       <span class="who" id="who"></span>
       <a class="btn btn-ghost" href="index.html">Main site</a>
+      <a class="btn btn-ghost" href="edit.html" id="to-exec" hidden>Exec portal</a>
       <button class="btn btn-ghost" id="signout" type="button" hidden>Sign out</button>
     </div>
   </div>
@@ -394,13 +395,18 @@ let isExecAdmin = false;
 
 onAuthStateChanged(auth, async user => {
   $("signout").hidden = !user;
+  $("to-exec").hidden = true;
   $("who").textContent = user ? user.email : "";
   if (!user) { profile = null; show("v-auth"); return; }
   show("v-loading");
   try {
     isExecAdmin = false;
     if (user.emailVerified) {
-      try { const a = await getDoc(doc(db, "access", user.email.toLowerCase())); isExecAdmin = a.exists() && a.data().admin === true; } catch (_) {}
+      try {
+        const a = await getDoc(doc(db, "access", user.email.toLowerCase()));
+        isExecAdmin = a.exists() && a.data().admin === true;
+        $("to-exec").hidden = !a.exists();
+      } catch (_) {}
     }
     const ref = doc(db, "users", user.uid);
     let snap = await getDoc(ref);
