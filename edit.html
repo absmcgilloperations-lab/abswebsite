@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ABS Exec Portal</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Barlow:wght@400;500;600&family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#ED1B2F; --red-dark:#C41526; --red-soft:#FDE8EA;
+  --ink:#1B1B1D; --text:#4A4A4F; --muted:#7A7A80;
+  --cream:#F7F3EC; --line:#E6E0D6; --white:#FFFFFF; --black:#0B0B0C;
+  --ok:#1F7A4D; --ok-soft:#E3F3EA;
+  --head:"Oswald","Arial Narrow",Arial,sans-serif;
+  --body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --serif:"Cormorant Garamond",Garamond,serif;
+  --r-sm:12px; --r:18px; --r-lg:28px; --pill:999px;
+  --shadow:0 18px 44px -26px rgba(27,27,29,.35);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3{font-family:var(--head);color:var(--ink);text-transform:uppercase;margin:0;line-height:1.15;font-weight:600;letter-spacing:.01em}
+p{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:var(--r-sm)}
+[hidden]{display:none!important}
+
+.top{background:var(--black);color:#fff}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+.brand .abs{font-family:var(--serif);font-weight:700;font-size:1.8rem;letter-spacing:.06em;line-height:1}
+.brand .bar{width:1px;height:24px;background:var(--red)}
+.brand .full{font-family:var(--head);font-size:.85rem;letter-spacing:.12em;text-transform:uppercase}
+.top-right{display:flex;align-items:center;gap:12px;font-size:.9rem}
+.top-right .who{color:rgba(255,255,255,.75);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:560px){.top-right .who{display:none}.brand .bar,.brand .full{display:none}}
+
+main{padding:40px 0 80px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:var(--pill);border:1px solid transparent;font-weight:500;font-size:.95rem;cursor:pointer;text-decoration:none;transition:background .2s,border-color .2s,color .2s}
+.btn:disabled{opacity:.55;cursor:default}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover:not(:disabled){background:var(--red-dark)}
+.btn-line{background:#fff;border-color:var(--line);color:var(--ink)}.btn-line:hover:not(:disabled){border-color:var(--red);color:var(--red)}
+.btn-ghost{background:transparent;border-color:rgba(255,255,255,.4);color:#fff;padding:7px 16px;font-size:.88rem}.btn-ghost:hover{background:#fff;color:var(--ink)}
+.btn-sm{padding:7px 14px;font-size:.86rem}
+.btn-danger{background:#fff;border-color:var(--line);color:var(--red-dark)}.btn-danger:hover{background:var(--red);border-color:var(--red);color:#fff}
+.btn svg{width:18px;height:18px;flex:none}
+
+.panel{background:#fff;border-radius:var(--r-lg);padding:32px;box-shadow:var(--shadow)}
+.center-card{max-width:460px;margin:8vh auto 0;text-align:center;display:grid;gap:16px;justify-items:center}
+.center-card h1{font-size:2rem}
+.eyebrow{font-family:var(--head);font-weight:500;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+
+.me{display:grid;grid-template-columns:240px 1fr;gap:32px;align-items:start}
+.me-card{background:var(--cream);border-radius:var(--r);padding:12px 12px 18px;text-align:center;display:grid;gap:4px}
+.me-card .ph{aspect-ratio:1;border-radius:var(--r-sm);overflow:hidden;margin-bottom:10px;background:var(--line)}
+.me-card .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.me-card .ph.ini{display:grid;place-items:center;background:linear-gradient(140deg,var(--red),var(--red-dark));color:#fff;font-family:var(--serif);font-weight:700;font-size:3rem}
+.me-card b{font-family:var(--head);text-transform:uppercase;color:var(--ink);font-size:1.1rem;font-weight:600}
+.me-card span{color:var(--red);font-size:.9rem}
+.me-card small{color:var(--muted);font-size:.8rem;margin-top:8px}
+@media (max-width:760px){.me{grid-template-columns:1fr}.me-card{max-width:240px}}
+
+form{display:grid;gap:18px}
+label{display:grid;gap:6px;font-weight:600;color:var(--ink);font-size:.95rem}
+label .hint{font-weight:400;color:var(--muted);font-size:.85rem}
+input[type=text],input[type=email],input[type=url],input[type=number],select,textarea{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink);font-size:1rem}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft)}
+textarea{min-height:110px;resize:vertical}
+.check{display:flex;align-items:center;gap:10px;font-weight:500}
+.check input{width:18px;height:18px;accent-color:var(--red)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.counter{font-weight:400;color:var(--muted);font-size:.8rem;justify-self:end}
+.status{font-size:.92rem;padding:10px 14px;border-radius:var(--r-sm)}
+.status.ok{background:var(--ok-soft);color:var(--ok)}
+.status.err{background:var(--red-soft);color:var(--red-dark)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}}
+
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin:44px 0 16px}
+.section-head h2{font-size:1.6rem}
+.tabs{display:flex;gap:6px;background:#fff;padding:5px;border-radius:var(--pill);border:1px solid var(--line)}
+.tabs button{border:0;background:none;padding:8px 18px;border-radius:var(--pill);cursor:pointer;font-weight:500;color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--red);color:#fff}
+
+.list{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;background:#fff;border-radius:var(--r);padding:10px 14px 10px 10px}
+.item .av{width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--line);display:grid;place-items:center;font-family:var(--serif);font-weight:700;color:#fff}
+.item .av.ini{background:var(--red)}
+.item .av img{width:100%;height:100%;object-fit:cover}
+.item .info{min-width:0}
+.item .info b{display:block;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .info small{color:var(--muted);font-size:.85rem;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 9px;border-radius:var(--pill);background:var(--red-soft);color:var(--red);margin-left:6px;vertical-align:2px}
+.badge.grey{background:var(--cream);color:var(--muted)}
+.empty{background:#fff;border-radius:var(--r);padding:28px;text-align:center;display:grid;gap:12px;justify-items:center}
+
+dialog{border:0;border-radius:var(--r-lg);padding:0;width:min(560px,calc(100vw - 32px));box-shadow:0 30px 80px -20px rgba(0,0,0,.45)}
+dialog::backdrop{background:rgba(11,11,12,.55)}
+dialog .d-body{padding:28px;display:grid;gap:18px}
+dialog h3{font-size:1.4rem}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="abs">ABS</span><span class="bar"></span><span class="full">Exec Portal</span></a>
+    <div class="top-right">
+      <span class="who" id="who"></span>
+      <a class="btn btn-ghost" href="index.html">View site</a>
+      <button class="btn btn-ghost" id="signout" type="button" hidden>Sign out</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- Loading -->
+  <section id="v-loading" class="panel center-card"><p>Loading…</p></section>
+
+  <!-- Signed out -->
+  <section id="v-signin" class="panel center-card" hidden>
+    <span class="eyebrow">McGill Athletes in Business</span>
+    <h1>Exec portal</h1>
+    <p>Sign in with the Google account ABS has on file for you to update your card on the Team page.</p>
+    <button class="btn btn-red" id="signin" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"/><path fill="#fff" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z" opacity=".85"/><path fill="#fff" d="M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1A10 10 0 0 0 2 12c0 1.6.4 3.1 1.1 4.6L6.4 14z" opacity=".7"/><path fill="#fff" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z" opacity=".9"/></svg>
+      Sign in with Google
+    </button>
+    <p class="status err" id="signin-error" hidden></p>
+  </section>
+
+  <!-- Signed in, not on the list -->
+  <section id="v-denied" class="panel center-card" hidden>
+    <span class="eyebrow">Not on the list yet</span>
+    <h1>Ask an admin to add you</h1>
+    <p>You're signed in as <b id="denied-email"></b>, but that account isn't linked to an exec card. Send this exact address to an ABS admin and they can add you in a minute.</p>
+    <button class="btn btn-line" id="denied-signout" type="button">Sign in with a different account</button>
+  </section>
+
+  <!-- Signed in -->
+  <section id="v-app" hidden>
+    <div class="panel">
+      <div class="me">
+        <div class="me-card" id="me-card"></div>
+        <div>
+          <span class="eyebrow">Your card</span>
+          <h1 style="font-size:1.9rem;margin:6px 0 6px">Your contact details</h1>
+          <p style="margin-bottom:22px">These show when someone opens your card on the Team page. Leave anything blank to keep it private.</p>
+          <form id="me-form" novalidate>
+            <label>Contact email <span class="hint">Shown publicly. Use one you're happy to get messages at.</span>
+              <input type="email" id="f-email" maxlength="120" autocomplete="email" placeholder="name@example.com">
+            </label>
+            <label>LinkedIn profile <span class="hint">Full link, starting with https://www.linkedin.com/in/</span>
+              <input type="url" id="f-linkedin" maxlength="200" placeholder="https://www.linkedin.com/in/your-name/">
+            </label>
+            <label>Short bio <span class="hint">Optional. Your sport, program and what you're interested in.</span>
+              <textarea id="f-bio" maxlength="400" placeholder="Varsity rugby, B.Com Finance '27. Interested in asset management."></textarea>
+              <span class="counter" id="bio-count">0 / 400</span>
+            </label>
+            <div class="row">
+              <button class="btn btn-red" type="submit" id="me-save">Save changes</button>
+              <a class="btn btn-line" href="index.html#team">See it on the site</a>
+            </div>
+            <p class="status" id="me-status" hidden></p>
+          </form>
+          <p id="me-missing" class="status err" hidden>Your access is linked to a card that doesn't exist yet. Ask an admin to check your entry under Access.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin -->
+    <div id="admin" hidden>
+      <div class="section-head">
+        <div><span class="eyebrow">Admin</span><h2>Manage the team</h2></div>
+        <div class="tabs" role="tablist">
+          <button type="button" role="tab" id="t-team" aria-selected="true">Team</button>
+          <button type="button" role="tab" id="t-access" aria-selected="false">Who can sign in</button>
+        </div>
+      </div>
+
+      <div id="p-team">
+        <div class="row" style="margin-bottom:14px">
+          <button class="btn btn-red btn-sm" type="button" id="add-member">Add a person</button>
+          <span class="hint" style="color:var(--muted);font-size:.88rem">Cards show on the site in this order.</span>
+        </div>
+        <div class="list" id="members"></div>
+      </div>
+
+      <div id="p-access" hidden>
+        <div class="panel" style="padding:24px;margin-bottom:14px">
+          <form id="access-form" class="grid2" style="align-items:end">
+            <label>Google email <input type="email" id="a-email" required placeholder="their.name@gmail.com"></label>
+            <label>Their card <select id="a-member" required></select></label>
+            <label class="check"><input type="checkbox" id="a-admin"> Make admin</label>
+            <div class="row" style="justify-content:flex-end"><button class="btn btn-red btn-sm" type="submit">Give access</button></div>
+          </form>
+          <p class="status" id="access-status" hidden style="margin-top:12px"></p>
+        </div>
+        <div class="list" id="access"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Admin: edit a person -->
+<dialog id="m-dialog">
+  <form id="m-form" class="d-body" method="dialog" novalidate>
+    <h3 id="m-title">Edit person</h3>
+    <div class="grid2">
+      <label>Name <input type="text" id="m-name" required maxlength="80"></label>
+      <label>Role <input type="text" id="m-role" required maxlength="80" placeholder="Finance Associate"></label>
+      <label>Portfolio <select id="m-team" required></select></label>
+      <label>Order on site <input type="number" id="m-order" step="1"></label>
+    </div>
+    <label>Photo file <span class="hint">File name in assets/team/, e.g. henry-jagger.jpg. Leave blank for red initials.</span>
+      <input type="text" id="m-photo" maxlength="120">
+    </label>
+    <label>Contact email <input type="email" id="m-email" maxlength="120"></label>
+    <label>LinkedIn <input type="url" id="m-linkedin" maxlength="200"></label>
+    <label>Bio <textarea id="m-bio" maxlength="400"></textarea></label>
+    <p class="status err" id="m-status" hidden></p>
+    <div class="row" style="justify-content:space-between">
+      <button class="btn btn-danger btn-sm" type="button" id="m-delete">Remove from site</button>
+      <div class="row">
+        <button class="btn btn-line btn-sm" type="button" id="m-cancel">Cancel</button>
+        <button class="btn btn-red btn-sm" type="submit" id="m-save">Save</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<script src="team.js"></script>
+<script type="module">
+import { firebaseConfig } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, collection, query, orderBy, writeBatch, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const GROUPS = window.TEAM_GROUPS || ["Leadership","Finance","Marketing","Logistics","Corporate Relations","Events","Engagement","External"];
+
+const $ = id => document.getElementById(id);
+const views = ["v-loading", "v-signin", "v-denied", "v-app"];
+const show = v => views.forEach(x => $(x).hidden = x !== v);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const initials = n => { const p = String(n).trim().split(/\s+/); return ((p[0]||"")[0] + (p.length > 1 ? p[p.length-1][0] : "")).toUpperCase(); };
+const slug = n => String(n).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const avatar = (m, cls) => m.photo
+  ? `<div class="${cls}"><img src="assets/team/${esc(m.photo)}" alt=""></div>`
+  : `<div class="${cls} ini">${esc(initials(m.name))}</div>`;
+const LINKEDIN = /^https:\/\/([a-z]+\.)?linkedin\.com\/.+/i;
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function setStatus(el, kind, msg){ el.hidden = !msg; el.className = "status " + (kind || ""); el.textContent = msg || ""; }
+function friendly(err){
+  const c = err && err.code || "";
+  if (c.includes("permission-denied")) return "You don't have permission to do that. If this keeps happening, ask an admin to check your access.";
+  if (c.includes("popup-closed")) return "The sign-in window was closed before you finished.";
+  if (c.includes("popup-blocked")) return "Your browser blocked the sign-in window. Allow pop-ups for this site and try again.";
+  if (c.includes("unavailable") || c.includes("network")) return "Couldn't reach the server. Check your connection and try again.";
+  return "Something went wrong (" + (c || (err && err.message) || "unknown error") + ").";
+}
+
+let me = null;          // { email, memberId, admin }
+let members = [];       // [{ id, ...data }]
+
+// ---------- Sign in / out ----------
+$("signin").onclick = async () => {
+  setStatus($("signin-error"), "", "");
+  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+  catch (e) { setStatus($("signin-error"), "err", friendly(e)); }
+};
+$("signout").onclick = () => signOut(auth);
+$("denied-signout").onclick = () => signOut(auth);
+
+onAuthStateChanged(auth, async user => {
+  $("signout").hidden = !user;
+  $("who").textContent = user ? user.email : "";
+  if (!user) { me = null; show("v-signin"); return; }
+  show("v-loading");
+  const email = user.email.toLowerCase();
+  try {
+    const a = await getDoc(doc(db, "access", email));
+    if (!a.exists()) { $("denied-email").textContent = email; show("v-denied"); return; }
+    me = { email, ...a.data() };
+    await loadMembers();
+    renderMe();
+    $("admin").hidden = !me.admin;
+    if (me.admin) { renderMembers(); await loadAccess(); }
+    show("v-app");
+  } catch (e) {
+    $("denied-email").textContent = email;
+    show("v-denied");
+    console.error(e);
+  }
+});
+
+async function loadMembers(){
+  const snap = await getDocs(query(collection(db, "members"), orderBy("order")));
+  members = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+// ---------- My card ----------
+function renderMe(){
+  const m = members.find(x => x.id === me.memberId);
+  $("me-form").hidden = !m;
+  $("me-missing").hidden = !!m;
+  if (!m) { $("me-card").innerHTML = ""; return; }
+  $("me-card").innerHTML = avatar(m, "ph") + `<b>${esc(m.name)}</b><span>${esc(m.role)}</span><small>${esc(m.team)}</small>`;
+  $("f-email").value = m.email || "";
+  $("f-linkedin").value = m.linkedin || "";
+  $("f-bio").value = m.bio || "";
+  $("bio-count").textContent = $("f-bio").value.length + " / 400";
+}
+$("f-bio").addEventListener("input", () => $("bio-count").textContent = $("f-bio").value.length + " / 400");
+
+$("me-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = $("f-email").value.trim(), linkedin = $("f-linkedin").value.trim(), bio = $("f-bio").value.trim();
+  if (email && !EMAIL.test(email)) return setStatus($("me-status"), "err", "That email address doesn't look right.");
+  if (linkedin && !LINKEDIN.test(linkedin)) return setStatus($("me-status"), "err", "LinkedIn links need to start with https://www.linkedin.com/");
+  $("me-save").disabled = true;
+  try {
+    await updateDoc(doc(db, "members", me.memberId), { email, linkedin, bio, updatedAt: serverTimestamp() });
+    Object.assign(members.find(x => x.id === me.memberId), { email, linkedin, bio });
+    setStatus($("me-status"), "ok", "Saved. Your card on the Team page is updated.");
+    if (me.admin) renderMembers();
+  } catch (err) { setStatus($("me-status"), "err", friendly(err)); }
+  $("me-save").disabled = false;
+});
+
+// ---------- Admin: tabs ----------
+function tab(which){
+  $("t-team").setAttribute("aria-selected", which === "team");
+  $("t-access").setAttribute("aria-selected", which === "access");
+  $("p-team").hidden = which !== "team";
+  $("p-access").hidden = which !== "access";
+}
+$("t-team").onclick = () => tab("team");
+$("t-access").onclick = () => tab("access");
+
+// ---------- Admin: team ----------
+function renderMembers(){
+  const box = $("members");
+  if (!members.length) {
+    box.innerHTML = `<div class="empty"><b>No one on the site yet.</b><p>Copy everyone from team.js into the database to get started.</p>
+      <button class="btn btn-red btn-sm" type="button" id="import">Import ${(window.TEAM||[]).length} people from team.js</button></div>`;
+    $("import").onclick = importTeam;
+    return;
+  }
+  box.innerHTML = members.map(m => `
+    <div class="item">
+      ${avatar(m, "av")}
+      <div class="info"><b>${esc(m.name)}</b><small>${esc(m.role)} · ${esc(m.team)}${m.linkedin || m.email ? "" : ' · <span style="color:var(--red)">no contact details</span>'}</small></div>
+      <button class="btn btn-line btn-sm" type="button" data-edit="${esc(m.id)}">Edit</button>
+    </div>`).join("");
+  box.querySelectorAll("[data-edit]").forEach(b => b.onclick = () => openMember(b.dataset.edit));
+  fillMemberSelect();
+}
+
+async function importTeam(){
+  const list = window.TEAM || [];
+  const batch = writeBatch(db);
+  const used = new Set();
+  list.forEach((p, i) => {
+    let id = slug(p.name); while (used.has(id)) id += "-2"; used.add(id);
+    batch.set(doc(db, "members", id), {
+      name: p.name, role: p.role, team: p.team, photo: p.photo || null,
+      email: p.email || "", linkedin: p.linkedin || "", bio: "", order: (i + 1) * 10
+    });
+  });
+  try { await batch.commit(); await loadMembers(); renderMe(); renderMembers(); }
+  catch (e) { alert(friendly(e)); }
+}
+
+let editing = null;
+GROUPS.forEach(g => $("m-team").insertAdjacentHTML("beforeend", `<option>${esc(g)}</option>`));
+function openMember(id){
+  editing = id ? members.find(m => m.id === id) : null;
+  const m = editing || { name: "", role: "", team: GROUPS[1] || GROUPS[0], photo: "", email: "", linkedin: "", bio: "", order: (members.length + 1) * 10 };
+  $("m-title").textContent = editing ? "Edit " + m.name : "Add a person";
+  $("m-name").value = m.name; $("m-role").value = m.role; $("m-team").value = m.team;
+  $("m-order").value = m.order; $("m-photo").value = m.photo || "";
+  $("m-email").value = m.email || ""; $("m-linkedin").value = m.linkedin || ""; $("m-bio").value = m.bio || "";
+  $("m-delete").hidden = !editing;
+  setStatus($("m-status"), "", "");
+  $("m-dialog").showModal();
+}
+$("add-member").onclick = () => openMember(null);
+$("m-cancel").onclick = () => $("m-dialog").close();
+$("m-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const data = {
+    name: $("m-name").value.trim(), role: $("m-role").value.trim(), team: $("m-team").value,
+    order: Number($("m-order").value) || 0, photo: $("m-photo").value.trim() || null,
+    email: $("m-email").value.trim(), linkedin: $("m-linkedin").value.trim(), bio: $("m-bio").value.trim()
+  };
+  if (!data.name || !data.role) return setStatus($("m-status"), "err", "Name and role are required.");
+  if (data.email && !EMAIL.test(data.email)) return setStatus($("m-status"), "err", "That email address doesn't look right.");
+  if (data.linkedin && !LINKEDIN.test(data.linkedin)) return setStatus($("m-status"), "err", "LinkedIn links need to start with https://www.linkedin.com/");
+  try {
+    if (editing) await setDoc(doc(db, "members", editing.id), data);
+    else {
+      let id = slug(data.name); while (members.some(m => m.id === id)) id += "-2";
+      await setDoc(doc(db, "members", id), data);
+    }
+    $("m-dialog").close();
+    await loadMembers(); renderMe(); renderMembers();
+  } catch (err) { setStatus($("m-status"), "err", friendly(err)); }
+});
+$("m-delete").onclick = async () => {
+  if (!editing) return;
+  const btn = $("m-delete");
+  if (btn.dataset.confirm !== editing.id) { btn.dataset.confirm = editing.id; btn.textContent = "Click again to remove " + editing.name.split(" ")[0]; return; }
+  delete btn.dataset.confirm; btn.textContent = "Remove from site";
+  try { await deleteDoc(doc(db, "members", editing.id)); $("m-dialog").close(); await loadMembers(); renderMe(); renderMembers(); }
+  catch (err) { setStatus($("m-status"), "err", friendly(err)); }
+};
+$("m-dialog").addEventListener("close", () => { delete $("m-delete").dataset.confirm; $("m-delete").textContent = "Remove from site"; });
+
+// ---------- Admin: who can sign in ----------
+function fillMemberSelect(){
+  $("a-member").innerHTML = members.map(m => `<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("");
+}
+async function loadAccess(){
+  const snap = await getDocs(collection(db, "access"));
+  const rows = snap.docs.map(d => ({ email: d.id, ...d.data() })).sort((a, b) => a.email.localeCompare(b.email));
+  const nameOf = id => (members.find(m => m.id === id) || {}).name || id;
+  $("access").innerHTML = rows.length ? rows.map(r => `
+    <div class="item">
+      <div class="av ini">${esc(initials(nameOf(r.memberId)))}</div>
+      <div class="info"><b>${esc(r.email)}${r.admin ? '<span class="badge">Admin</span>' : ""}</b><small>Edits: ${esc(nameOf(r.memberId))}</small></div>
+      ${r.email === me.email ? '<span class="badge grey">You</span>' : `<button class="btn btn-danger btn-sm" type="button" data-revoke="${esc(r.email)}">Remove</button>`}
+    </div>`).join("") : `<div class="empty">No one has access yet.</div>`;
+  $("access").querySelectorAll("[data-revoke]").forEach(b => b.onclick = async () => {
+    if (b.dataset.confirm !== "1") { b.dataset.confirm = "1"; b.textContent = "Click again"; return; }
+    try { await deleteDoc(doc(db, "access", b.dataset.revoke)); await loadAccess(); }
+    catch (err) { setStatus($("access-status"), "err", friendly(err)); }
+  });
+  fillMemberSelect();
+}
+$("access-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = $("a-email").value.trim().toLowerCase();
+  if (!EMAIL.test(email)) return setStatus($("access-status"), "err", "Enter the full Google email address.");
+  if (!$("a-member").value) return setStatus($("access-status"), "err", "Add the person to the team first, then give them access.");
+  try {
+    await setDoc(doc(db, "access", email), { memberId: $("a-member").value, admin: $("a-admin").checked });
+    $("access-form").reset();
+    setStatus($("access-status"), "ok", email + " can now sign in.");
+    await loadAccess();
+  } catch (err) { setStatus($("access-status"), "err", friendly(err)); }
+});
+</script>
+</body>
+</html>

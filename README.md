@@ -16,3 +16,22 @@ Each section in `index.html` starts with a comment (`<!-- EVENTS -->`, `<!-- TEA
 ## Hosting
 
 The site can be hosted for free with GitHub Pages. In the repo, go to Settings → Pages, then under "Build and deployment" choose "Deploy from a branch", with branch `main` and folder `/ (root)`.
+
+## Exec portal (edit.html)
+
+Execs sign in with Google at `/edit.html` (also linked as "Exec login" in the footer) and can edit their own contact email, LinkedIn and bio. Changes appear on the Team section straight away.
+
+- **Admins** can edit anyone's card, add or remove people, and manage who can sign in under "Who can sign in".
+- **To add a new exec:** add them under Team ("Add a person"), then give their Google email access and link it to their card.
+- **Headshots** are still files in `assets/team/`. Upload the photo to the repo, then set the file name on the person's card.
+- If the database can't be reached, the Team section falls back to `team.js`. Keep it roughly in sync at handover.
+
+## Accounts & access
+
+| What | Where | Owner |
+|---|---|---|
+| Website code and hosting | GitHub: `absmcgilloperations-lab/abswebsite` (GitHub Pages) | ABS operations GitHub account |
+| Sign-in and team database | Firebase project `abs-website-2f2ea` (console.firebase.google.com) | Henry Jagger's personal Google account (2026–27). **Add the ABS Google account as an Owner** under Project settings → Users and permissions before handover. |
+| Database security rules | `firestore.rules` in this repo, published in Firebase → Firestore → Rules | Paste and publish there after any change |
+
+Keep at least two owners on each account, and store passwords and 2FA recovery codes somewhere the club controls.

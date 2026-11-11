@@ -1,0 +1,68 @@
+rules_version = '2';
+
+// Security rules for the ABS exec portal.
+// Published in the Firebase console: Firestore Database -> Rules. Keep this file in sync with what's published there.
+//
+// members/{memberId}   One exec card. Anyone can read. Execs can edit only their own email, LinkedIn and bio.
+// access/{googleEmail} Who may sign in: { memberId, admin }. Only admins can see or change the whole list.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function myEmail() {
+      return request.auth.token.email.lower();
+    }
+    function hasAccess() {
+      return signedIn() && exists(/databases/$(database)/documents/access/$(myEmail()));
+    }
+    function myAccess() {
+      return get(/databases/$(database)/documents/access/$(myEmail())).data;
+    }
+    function isAdmin() {
+      return hasAccess() && myAccess().admin == true;
+    }
+
+    function validText(d, key, max) {
+      return !(key in d) || (d[key] is string && d[key].size() <= max);
+    }
+    function validLinkedIn(d) {
+      return !('linkedin' in d) || d.linkedin == ''
+        || (d.linkedin is string && d.linkedin.size() <= 200
+            && d.linkedin.matches('https://([a-z]+[.])?linkedin[.]com/.*'));
+    }
+    function validContact(d) {
+      return validText(d, 'email', 120) && validText(d, 'bio', 400) && validLinkedIn(d);
+    }
+    function validMember(d) {
+      return d.name is string && d.name.size() > 0 && d.name.size() <= 80
+        && d.role is string && d.role.size() <= 80
+        && d.team is string && d.team.size() <= 40
+        && d.order is number
+        && (!('photo' in d) || d.photo == null || (d.photo is string && d.photo.size() <= 120))
+        && validContact(d);
+    }
+
+    match /members/{memberId} {
+      allow read: if true;
+      allow create: if isAdmin() && validMember(request.resource.data);
+      allow delete: if isAdmin();
+      allow update: if
+        (isAdmin() && validMember(request.resource.data))
+        || (hasAccess() && myAccess().memberId == memberId
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['email', 'linkedin', 'bio', 'updatedAt'])
+            && validContact(request.resource.data));
+    }
+
+    match /access/{email} {
+      allow read: if signedIn() && (email == myEmail() || isAdmin());
+      allow create, update: if isAdmin()
+        && email == email.lower()
+        && request.resource.data.memberId is string
+        && request.resource.data.admin is bool;
+      allow delete: if isAdmin() && email != myEmail();
+    }
+  }
+}
