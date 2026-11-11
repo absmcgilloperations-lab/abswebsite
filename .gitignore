@@ -3,3 +3,7 @@
 assets/DSC*.jpg
 *.zip
 assets/ABS Final headshots/
+# raw photos stay local; the site uses resized copies
+assets/Arts_Building*.jpg
+assets/Athletics.jpg
+assets/2671-universite-mcgill.png
