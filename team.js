@@ -20,7 +20,7 @@ window.TEAM = [
   { name: "Micheal Zampardi",  role: "Finance Associate",             team: "Finance",             photo: "micheal-zampardi.jpg",  email: "", linkedin: "" },
 
   { name: "Katie Woolfenden",  role: "VP Marketing",                  team: "Marketing",           photo: "katie-woolfenden.jpg",  email: "", linkedin: "" },
-  { name: "Emma Sutton",       role: "Marketing Associate",           team: "Marketing",           photo: "emma-sutton.jpg",       email: "", linkedin: "" },
+  { name: "Emma Sutton",       role: "Marketing Associate",           team: "Marketing",           photo: "emma-sutton-2.jpg",       email: "", linkedin: "" },
   { name: "Juju Woolfenden",   role: "Marketing Associate",           team: "Marketing",           photo: "juju-woolfenden.jpg",   email: "", linkedin: "" },
   { name: "Nat Wigle",         role: "Marketing Associate",           team: "Marketing",           photo: "nat-wigle.jpg",         email: "", linkedin: "" },
 
