@@ -104,6 +104,32 @@ dialog{border:0;border-radius:var(--r-lg);padding:0;width:min(560px,calc(100vw -
 dialog::backdrop{background:rgba(11,11,12,.55)}
 dialog .d-body{padding:28px;display:grid;gap:18px}
 dialog h3{font-size:1.4rem}
+.photo-row{display:flex;gap:16px;align-items:center;background:var(--cream);border-radius:var(--r);padding:14px}
+.photo-prev{flex:none;width:84px;height:84px;border-radius:var(--r-sm);overflow:hidden;display:grid;place-items:center;background:var(--line)}
+.photo-prev img{width:100%;height:100%;object-fit:cover}
+.photo-prev.ini{background:linear-gradient(140deg,var(--red),var(--red-dark));color:#fff;font-family:var(--serif);font-weight:700;font-size:1.8rem}
+dialog{max-height:calc(100vh - 32px);overflow:auto}
+
+/* Calendar admin */
+.cal-admin-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
+@media (max-width:860px){.cal-admin-grid{grid-template-columns:1fr}}
+.ev-item{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;background:#fff;border-radius:var(--r);padding:12px 14px 12px 12px}
+.ev-item.past{opacity:.6}
+.ev-badge{background:var(--red);color:#fff;border-radius:12px;text-align:center;padding:6px 0;line-height:1.1}
+.ev-badge small{display:block;font-family:var(--head);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+.ev-badge b{font-family:var(--head);font-size:1.4rem;font-weight:600}
+.ev-item.past .ev-badge{background:var(--muted)}
+.ev-item .info b{display:block;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev-item .info small{color:var(--muted);font-size:.85rem;display:block}
+.sub-h{font-size:1rem;margin:22px 0 10px;color:var(--ink)}
+.preview-label{font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.ev-preview{background:var(--cream);border-radius:var(--r);padding:16px;display:grid;grid-template-columns:64px 1fr;gap:14px}
+.ev-preview h4{margin:0;font-family:var(--body);font-weight:600;font-size:1.1rem;color:var(--ink)}
+.ev-preview p{font-size:.9rem;color:var(--ink)}
+.ev-preview .cat{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 9px;border-radius:var(--pill);background:#fff;color:var(--red);margin-bottom:4px}
+.t-item{background:#fff;border-radius:var(--r);padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start}
+.t-item q{display:block;color:var(--ink);font-size:.95rem}
+.t-item small{display:block;color:var(--muted);margin-top:6px}
 </style>
 </head>
 <body>
@@ -190,6 +216,8 @@ dialog h3{font-size:1.4rem}
           <button type="button" role="tab" id="t-access" aria-selected="false">Who can sign in</button>
           <button type="button" role="tab" id="t-requests" aria-selected="false">Member requests <span class="badge" id="req-count" hidden></span></button>
           <button type="button" role="tab" id="t-resources" aria-selected="false">Resources</button>
+          <button type="button" role="tab" id="t-calendar" aria-selected="false">Calendar</button>
+          <button type="button" role="tab" id="t-testimonials" aria-selected="false">Testimonials</button>
         </div>
       </div>
 
@@ -225,6 +253,56 @@ dialog h3{font-size:1.4rem}
         <p class="status" id="req-status" hidden style="margin-top:12px"></p>
       </div>
 
+      <div id="p-calendar" hidden>
+        <div class="cal-admin-grid">
+          <div class="panel" style="padding:24px">
+            <h3 style="font-size:1.2rem;margin-bottom:14px" id="e-form-title">Add an event</h3>
+            <form id="e-form" novalidate>
+              <label>Event name <input type="text" id="e-title" maxlength="120" placeholder="Speaker night with Tim Laurie, CFA"></label>
+              <div class="grid2">
+                <label>Date <input type="date" id="e-date"></label>
+                <label>Type <span class="hint">Pick one or type your own</span><input type="text" id="e-cat" list="e-cats" maxlength="40" placeholder="Speaker event"></label>
+                <label>Starts <span class="hint">Leave blank for all day</span><input type="time" id="e-start"></label>
+                <label>Ends <span class="hint">Optional</span><input type="time" id="e-end"></label>
+              </div>
+              <datalist id="e-cats"><option value="Speaker event"><option value="Social"><option value="Workshop"><option value="Mentorship"><option value="Info session"><option value="Deadline"></datalist>
+              <label>Location <span class="hint">Optional</span><input type="text" id="e-loc" maxlength="120" placeholder="Bronfman Building, Room 151"></label>
+              <label>Description <span class="hint">Optional. One or two sentences.</span><textarea id="e-desc" maxlength="600" style="min-height:80px"></textarea></label>
+              <div class="grid2">
+                <label>Link <span class="hint">Optional: RSVP form, sign-up, Instagram post</span><input type="url" id="e-link" maxlength="500" placeholder="https://"></label>
+                <label>Button text <span class="hint">Shown on the button</span><input type="text" id="e-link-label" maxlength="30" placeholder="RSVP"></label>
+              </div>
+              <div class="row"><button class="btn btn-red btn-sm" type="submit" id="e-save">Add to calendar</button><button class="btn btn-line btn-sm" type="button" id="e-cancel" hidden>Cancel editing</button></div>
+              <p class="status" id="e-status" hidden></p>
+            </form>
+          </div>
+          <div>
+            <p class="preview-label">How it will look on the site</p>
+            <div class="ev-preview" id="e-preview"></div>
+            <h3 class="sub-h">Upcoming</h3>
+            <div class="list" id="e-upcoming"></div>
+            <h3 class="sub-h">Past</h3>
+            <div class="list" id="e-past"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="p-testimonials" hidden>
+        <p style="margin-bottom:14px">Short quotes from members or alumni. The Testimonials section appears on the homepage as soon as there's at least one.</p>
+        <div class="panel" style="padding:24px;margin-bottom:14px">
+          <form id="q-form" novalidate>
+            <label>Quote <textarea id="q-text" maxlength="400" placeholder="ABS connected me with alumni who helped me prepare for my first recruiting season."></textarea><span class="counter" id="q-count">0 / 400</span></label>
+            <div class="grid2">
+              <label>Name <input type="text" id="q-name" maxlength="80"></label>
+              <label>Details <span class="hint">e.g. Class of 2026 · Varsity Soccer · RBC</span><input type="text" id="q-detail" maxlength="100"></label>
+            </div>
+            <div class="row"><button class="btn btn-red btn-sm" type="submit" id="q-save">Add testimonial</button><button class="btn btn-line btn-sm" type="button" id="q-cancel" hidden>Cancel editing</button></div>
+            <p class="status" id="q-status" hidden></p>
+          </form>
+        </div>
+        <div class="list" id="q-list"></div>
+      </div>
+
       <div id="p-resources" hidden>
         <div class="panel" style="padding:24px;margin-bottom:14px">
           <form id="res-form" novalidate>
@@ -252,12 +330,22 @@ dialog h3{font-size:1.4rem}
     <div class="grid2">
       <label>Name <input type="text" id="m-name" required maxlength="80"></label>
       <label>Role <input type="text" id="m-role" required maxlength="80" placeholder="Finance Associate"></label>
-      <label>Portfolio <select id="m-team" required></select></label>
-      <label>Order on site <input type="number" id="m-order" step="1"></label>
+      <label>Portfolio <span class="hint">Pick one, or type a new portfolio name</span><input type="text" id="m-team" list="m-teams" required maxlength="40"></label>
+      <label>Order on site <span class="hint">Lower numbers show first</span><input type="number" id="m-order" step="1"></label>
     </div>
-    <label>Photo file <span class="hint">File name in assets/team/, e.g. henry-jagger.jpg. Leave blank for red initials.</span>
-      <input type="text" id="m-photo" maxlength="120">
-    </label>
+    <datalist id="m-teams"></datalist>
+    <div class="photo-row">
+      <div class="photo-prev" id="m-photo-prev" aria-hidden="true"></div>
+      <div style="display:grid;gap:8px">
+        <b style="color:var(--ink)">Headshot</b>
+        <span class="hint" style="color:var(--muted);font-size:.85rem">Cropped to a square and shrunk automatically. JPG, PNG or iPhone photos.</span>
+        <div class="row" style="gap:8px">
+          <label class="btn btn-line btn-sm" for="m-photo-file" style="font-weight:500;display:inline-flex">Upload photo</label>
+          <input type="file" id="m-photo-file" accept="image/*" hidden>
+          <button class="btn btn-line btn-sm" type="button" id="m-photo-clear" hidden>Remove photo</button>
+        </div>
+      </div>
+    </div>
     <label>Contact email <input type="email" id="m-email" maxlength="120"></label>
     <label>LinkedIn <input type="url" id="m-linkedin" maxlength="200"></label>
     <label>Bio <textarea id="m-bio" maxlength="400"></textarea></label>
@@ -290,8 +378,10 @@ const show = v => views.forEach(x => $(x).hidden = x !== v);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const initials = n => { const p = String(n).trim().split(/\s+/); return ((p[0]||"")[0] + (p.length > 1 ? p[p.length-1][0] : "")).toUpperCase(); };
 const slug = n => String(n).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+// A photo is either a file in assets/team/ or an image uploaded here (stored as data)
+const photoSrc = p => /^data:image\//.test(p) ? p : "assets/team/" + p;
 const avatar = (m, cls) => m.photo
-  ? `<div class="${cls}"><img src="assets/team/${esc(m.photo)}" alt=""></div>`
+  ? `<div class="${cls}"><img src="${esc(photoSrc(m.photo))}" alt=""></div>`
   : `<div class="${cls} ini">${esc(initials(m.name))}</div>`;
 const LINKEDIN = /^https:\/\/([a-z]+\.)?linkedin\.com\/.+/i;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -378,7 +468,7 @@ $("me-form").addEventListener("submit", async e => {
 });
 
 // ---------- Admin: tabs ----------
-const TABS = ["team", "access", "requests", "resources"];
+const TABS = ["team", "access", "requests", "resources", "calendar", "testimonials"];
 function tab(which){
   TABS.forEach(t => {
     $("t-" + t).setAttribute("aria-selected", t === which);
@@ -386,6 +476,8 @@ function tab(which){
   });
   if (which === "requests") loadRequests();
   if (which === "resources") loadResources();
+  if (which === "calendar") loadEvents();
+  if (which === "testimonials") loadQuotes();
 }
 TABS.forEach(t => $("t-" + t).onclick = () => tab(t));
 
@@ -424,13 +516,48 @@ async function importTeam(){
 }
 
 let editing = null;
-GROUPS.forEach(g => $("m-team").insertAdjacentHTML("beforeend", `<option>${esc(g)}</option>`));
+let mPhoto = null;   // file name, uploaded image data, or null for initials
+function portfolios(){
+  const seen = new Set(GROUPS);
+  members.forEach(m => m.team && seen.add(m.team));
+  return [...seen];
+}
+function showMemberPhoto(){
+  const name = $("m-name").value || "?";
+  $("m-photo-prev").innerHTML = mPhoto ? `<img src="${esc(photoSrc(mPhoto))}" alt="">` : esc(initials(name));
+  $("m-photo-prev").classList.toggle("ini", !mPhoto);
+  $("m-photo-clear").hidden = !mPhoto;
+}
+// Square crop (favouring the top, where faces are) shrunk to a ~40 KB JPEG
+async function shrinkHeadshot(file){
+  const bmp = await createImageBitmap(file);
+  const s = Math.min(bmp.width, bmp.height);
+  const sx = (bmp.width - s) / 2;
+  const sy = bmp.height > bmp.width ? (bmp.height - s) * 0.15 : (bmp.height - s) / 2;
+  const c = document.createElement("canvas"); c.width = c.height = 400;
+  const g = c.getContext("2d"); g.imageSmoothingQuality = "high";
+  g.drawImage(bmp, sx, sy, s, s, 0, 0, 400, 400);
+  let q = 0.85, url = c.toDataURL("image/jpeg", q);
+  while (url.length > 140000 && q > 0.4) { q -= 0.1; url = c.toDataURL("image/jpeg", q); }
+  return url;
+}
+$("m-photo-file").addEventListener("change", async e => {
+  const f = e.target.files[0]; e.target.value = "";
+  if (!f) return;
+  try { mPhoto = await shrinkHeadshot(f); showMemberPhoto(); setStatus($("m-status"), "", ""); }
+  catch (_) { setStatus($("m-status"), "err", "Couldn't read that image. Try a JPG or PNG (on a Mac, open it in Preview and choose File → Export → JPEG)."); }
+});
+$("m-photo-clear").onclick = () => { mPhoto = null; showMemberPhoto(); };
+$("m-name").addEventListener("input", () => { if (!mPhoto) showMemberPhoto(); });
+
 function openMember(id){
   editing = id ? members.find(m => m.id === id) : null;
-  const m = editing || { name: "", role: "", team: GROUPS[1] || GROUPS[0], photo: "", email: "", linkedin: "", bio: "", order: (members.length + 1) * 10 };
+  const m = editing || { name: "", role: "", team: "", photo: null, email: "", linkedin: "", bio: "", order: (members.length + 1) * 10 };
+  $("m-teams").innerHTML = portfolios().map(g => `<option value="${esc(g)}">`).join("");
   $("m-title").textContent = editing ? "Edit " + m.name : "Add a person";
   $("m-name").value = m.name; $("m-role").value = m.role; $("m-team").value = m.team;
-  $("m-order").value = m.order; $("m-photo").value = m.photo || "";
+  $("m-order").value = m.order;
+  mPhoto = m.photo || null; showMemberPhoto();
   $("m-email").value = m.email || ""; $("m-linkedin").value = m.linkedin || ""; $("m-bio").value = m.bio || "";
   $("m-delete").hidden = !editing;
   setStatus($("m-status"), "", "");
@@ -441,11 +568,12 @@ $("m-cancel").onclick = () => $("m-dialog").close();
 $("m-form").addEventListener("submit", async e => {
   e.preventDefault();
   const data = {
-    name: $("m-name").value.trim(), role: $("m-role").value.trim(), team: $("m-team").value,
-    order: Number($("m-order").value) || 0, photo: $("m-photo").value.trim() || null,
+    name: $("m-name").value.trim(), role: $("m-role").value.trim(), team: $("m-team").value.trim(),
+    order: Number($("m-order").value) || 0, photo: mPhoto || null,
     email: $("m-email").value.trim(), linkedin: $("m-linkedin").value.trim(), bio: $("m-bio").value.trim()
   };
   if (!data.name || !data.role) return setStatus($("m-status"), "err", "Name and role are required.");
+  if (!data.team) return setStatus($("m-status"), "err", "Choose a portfolio, or type a new one.");
   if (data.email && !EMAIL.test(data.email)) return setStatus($("m-status"), "err", "That email address doesn't look right.");
   if (data.linkedin && !LINKEDIN.test(data.linkedin)) return setStatus($("m-status"), "err", "LinkedIn links need to start with https://www.linkedin.com/");
   try {
@@ -527,6 +655,154 @@ async function loadRequests(){
     catch (err) { setStatus($("req-status"), "err", friendly(err)); }
   });
 }
+
+// ---------- Admin: calendar ----------
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const two = n => String(n).padStart(2, "0");
+const localISO = d => d.getFullYear() + "-" + two(d.getMonth() + 1) + "-" + two(d.getDate());
+const time12 = t => { if (!t) return ""; let [h, m] = t.split(":").map(Number); const ap = h >= 12 ? "PM" : "AM"; h = h % 12 || 12; return h + (m ? ":" + two(m) : "") + " " + ap; };
+const dateOf = s => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+const whenText = e => {
+  if (!e.date) return "Pick a date";
+  const d = dateOf(e.date);
+  const day = d.toLocaleDateString("en-CA", { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+  return day + " · " + (e.start ? time12(e.start) + (e.end ? " – " + time12(e.end) : "") : "All day");
+};
+const badge = e => {
+  if (!e.date) return `<div class="ev-badge"><small>—</small><b>?</b></div>`;
+  const d = dateOf(e.date);
+  return `<div class="ev-badge"><small>${MON[d.getMonth()]}</small><b>${d.getDate()}</b></div>`;
+};
+let events = [], editingEv = null;
+function formEvent(){
+  return {
+    title: $("e-title").value.trim(), date: $("e-date").value, start: $("e-start").value, end: $("e-end").value,
+    category: $("e-cat").value.trim(), location: $("e-loc").value.trim(), description: $("e-desc").value.trim(),
+    link: $("e-link").value.trim(), linkLabel: $("e-link-label").value.trim()
+  };
+}
+function renderPreview(){
+  const e = formEvent();
+  $("e-preview").innerHTML = badge(e) + `<div>
+    ${e.category ? `<span class="cat">${esc(e.category)}</span>` : ""}
+    <h4>${esc(e.title || "Event name")}</h4>
+    <p>${esc(whenText(e))}${e.location ? " · " + esc(e.location) : ""}</p>
+    ${e.description ? `<p style="margin-top:6px">${esc(e.description)}</p>` : ""}
+    ${e.link ? `<p style="margin-top:8px"><span class="btn btn-red btn-sm" style="pointer-events:none">${esc(e.linkLabel || "RSVP / details")}</span></p>` : ""}
+  </div>`;
+}
+["e-title","e-date","e-start","e-end","e-cat","e-loc","e-desc","e-link","e-link-label"].forEach(id => $(id).addEventListener("input", renderPreview));
+
+async function loadEvents(){
+  try {
+    const s = await getDocs(collection(db, "events"));
+    events = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.date + (a.start || "")).localeCompare(b.date + (b.start || "")));
+  } catch (err) { return setStatus($("e-status"), "err", friendly(err)); }
+  const today = localISO(new Date());
+  const row = e => `
+    <div class="ev-item${e.date < today ? " past" : ""}">
+      ${badge(e)}
+      <div class="info"><b>${esc(e.title)}</b><small>${esc(whenText(e))}${e.location ? " · " + esc(e.location) : ""}</small></div>
+      <div class="row" style="gap:6px"><button class="btn btn-line btn-sm" type="button" data-eedit="${esc(e.id)}">Edit</button><button class="btn btn-danger btn-sm" type="button" data-edel="${esc(e.id)}">Delete</button></div>
+    </div>`;
+  const up = events.filter(e => e.date >= today), past = events.filter(e => e.date < today).reverse();
+  $("e-upcoming").innerHTML = up.length ? up.map(row).join("") : `<div class="empty">No upcoming events. Add one on the left.</div>`;
+  $("e-past").innerHTML = past.length ? past.map(row).join("") : `<div class="empty">None yet.</div>`;
+  document.querySelectorAll("[data-eedit]").forEach(b => b.onclick = () => {
+    const e = events.find(x => x.id === b.dataset.eedit); editingEv = e.id;
+    $("e-title").value = e.title || ""; $("e-date").value = e.date || ""; $("e-start").value = e.start || ""; $("e-end").value = e.end || "";
+    $("e-cat").value = e.category || ""; $("e-loc").value = e.location || ""; $("e-desc").value = e.description || "";
+    $("e-link").value = e.link || ""; $("e-link-label").value = e.linkLabel || "";
+    $("e-form-title").textContent = "Edit event"; $("e-save").textContent = "Save changes"; $("e-cancel").hidden = false;
+    renderPreview(); $("e-title").focus();
+  });
+  document.querySelectorAll("[data-edel]").forEach(b => b.onclick = async () => {
+    if (b.dataset.confirm !== "1") { b.dataset.confirm = "1"; b.textContent = "Click again"; return; }
+    try { await deleteDoc(doc(db, "events", b.dataset.edel)); if (editingEv === b.dataset.edel) resetEventForm(); loadEvents(); }
+    catch (err) { setStatus($("e-status"), "err", friendly(err)); }
+  });
+  renderPreview();
+}
+function resetEventForm(){
+  editingEv = null; $("e-form").reset();
+  $("e-form-title").textContent = "Add an event"; $("e-save").textContent = "Add to calendar"; $("e-cancel").hidden = true;
+  renderPreview();
+}
+$("e-cancel").onclick = resetEventForm;
+$("e-form").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const e = formEvent();
+  if (!e.title) return setStatus($("e-status"), "err", "Give the event a name.");
+  if (!e.date) return setStatus($("e-status"), "err", "Pick a date.");
+  if (e.end && !e.start) return setStatus($("e-status"), "err", "Add a start time, or clear the end time for an all-day event.");
+  if (e.start && e.end && e.end <= e.start) return setStatus($("e-status"), "err", "The end time needs to be after the start time.");
+  if (e.link && !/^https?:\/\/.+/i.test(e.link)) return setStatus($("e-status"), "err", "Paste the full link, starting with https://");
+  $("e-save").disabled = true;
+  try {
+    const id = editingEv || (e.date + "-" + slug(e.title).slice(0, 50));
+    await setDoc(doc(db, "events", id), { ...e, updatedAt: serverTimestamp() });
+    setStatus($("e-status"), "ok", editingEv ? "Saved. The calendar on the site is updated." : "Added. It's on the site's calendar now.");
+    resetEventForm(); loadEvents();
+  } catch (err) { setStatus($("e-status"), "err", friendly(err)); }
+  $("e-save").disabled = false;
+});
+
+// ---------- Admin: testimonials ----------
+let quotes = [], editingQ = null;
+$("q-text").addEventListener("input", () => $("q-count").textContent = $("q-text").value.length + " / 400");
+async function loadQuotes(){
+  try {
+    const s = await getDocs(collection(db, "testimonials"));
+    quotes = s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order || 0) - (b.order || 0));
+  } catch (err) { return setStatus($("q-status"), "err", friendly(err)); }
+  $("q-list").innerHTML = quotes.length ? quotes.map((q, i) => `
+    <div class="t-item">
+      <div><q>${esc(q.quote)}</q><small><b style="color:var(--ink)">${esc(q.name)}</b>${q.detail ? " · " + esc(q.detail) : ""}</small></div>
+      <div class="row" style="gap:6px">
+        ${i > 0 ? `<button class="btn btn-line btn-sm" type="button" data-qup="${i}" aria-label="Move up">↑</button>` : ""}
+        <button class="btn btn-line btn-sm" type="button" data-qedit="${esc(q.id)}">Edit</button>
+        <button class="btn btn-danger btn-sm" type="button" data-qdel="${esc(q.id)}">Delete</button>
+      </div>
+    </div>`).join("") : `<div class="empty">No testimonials yet, so the section is hidden on the site. Add the first one above.</div>`;
+  document.querySelectorAll("[data-qedit]").forEach(b => b.onclick = () => {
+    const q = quotes.find(x => x.id === b.dataset.qedit); editingQ = q.id;
+    $("q-text").value = q.quote; $("q-name").value = q.name; $("q-detail").value = q.detail || "";
+    $("q-count").textContent = q.quote.length + " / 400";
+    $("q-save").textContent = "Save changes"; $("q-cancel").hidden = false; $("q-text").focus();
+  });
+  document.querySelectorAll("[data-qdel]").forEach(b => b.onclick = async () => {
+    if (b.dataset.confirm !== "1") { b.dataset.confirm = "1"; b.textContent = "Click again"; return; }
+    try { await deleteDoc(doc(db, "testimonials", b.dataset.qdel)); loadQuotes(); }
+    catch (err) { setStatus($("q-status"), "err", friendly(err)); }
+  });
+  document.querySelectorAll("[data-qup]").forEach(b => b.onclick = async () => {
+    const i = Number(b.dataset.qup), a = quotes[i - 1], c = quotes[i];
+    try {
+      const batch = writeBatch(db);
+      batch.update(doc(db, "testimonials", a.id), { order: i * 10 });
+      batch.update(doc(db, "testimonials", c.id), { order: (i - 1) * 10 });
+      await batch.commit(); loadQuotes();
+    } catch (err) { setStatus($("q-status"), "err", friendly(err)); }
+  });
+}
+function resetQuoteForm(){ editingQ = null; $("q-form").reset(); $("q-count").textContent = "0 / 400"; $("q-save").textContent = "Add testimonial"; $("q-cancel").hidden = true; }
+$("q-cancel").onclick = resetQuoteForm;
+$("q-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const data = { quote: $("q-text").value.trim(), name: $("q-name").value.trim(), detail: $("q-detail").value.trim() };
+  if (!data.quote) return setStatus($("q-status"), "err", "Add the quote.");
+  if (!data.name) return setStatus($("q-status"), "err", "Add who said it.");
+  try {
+    if (editingQ) {
+      await updateDoc(doc(db, "testimonials", editingQ), data);
+    } else {
+      const order = quotes.length ? Math.max(...quotes.map(q => q.order || 0)) + 10 : 10;
+      await setDoc(doc(db, "testimonials", slug(data.name).slice(0, 40) + "-" + Date.now().toString(36)), { ...data, order });
+    }
+    setStatus($("q-status"), "ok", editingQ ? "Saved." : "Added. It's on the homepage now.");
+    resetQuoteForm(); loadQuotes();
+  } catch (err) { setStatus($("q-status"), "err", friendly(err)); }
+});
 
 // ---------- Admin: resources ----------
 let resources = [], editingRes = null;

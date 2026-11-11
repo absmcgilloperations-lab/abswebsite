@@ -17,6 +17,13 @@ Each section in `index.html` starts with a comment (`<!-- EVENTS -->`, `<!-- TEA
 
 The site can be hosted for free with GitHub Pages. In the repo, go to Settings → Pages, then under "Build and deployment" choose "Deploy from a branch", with branch `main` and folder `/ (root)`.
 
+## Managed from the exec portal (no code changes needed)
+
+- **Team:** Team tab → Add a person / Edit. Set name, role, portfolio (type a new name to create a new portfolio), order, and **upload a headshot** right there. The headcounts on the homepage and the portfolio filters update automatically. To remove someone, open their card and choose Remove from site.
+- **Calendar:** Calendar tab. Add the event name, date, optional start/end time (blank = all day), type, location, description and an RSVP link. A preview shows how it'll look. Events appear on the homepage calendar straight away; past events drop off the "Upcoming" list automatically. Visitors can add any event to Google Calendar.
+- **Testimonials:** Testimonials tab. Add a quote, the person's name and a short detail line. Use ↑ to reorder. The homepage section only appears once there's at least one.
+- **Club email:** absmcgilloperations@gmail.com is in the Join section and footer of `index.html`.
+
 ## Exec portal (edit.html)
 
 Execs sign in with Google at `/edit.html` (also linked as "Exec login" in the footer) and can edit their own contact email, LinkedIn and bio. Changes appear on the Team section straight away.
