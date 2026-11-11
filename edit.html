@@ -84,7 +84,7 @@ textarea{min-height:110px;resize:vertical}
 
 .section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin:44px 0 16px}
 .section-head h2{font-size:1.6rem}
-.tabs{display:flex;gap:6px;background:#fff;padding:5px;border-radius:var(--pill);border:1px solid var(--line)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;background:#fff;padding:5px;border-radius:var(--r);border:1px solid var(--line)}
 .tabs button{border:0;background:none;padding:8px 18px;border-radius:var(--pill);cursor:pointer;font-weight:500;color:var(--ink)}
 .tabs button[aria-selected="true"]{background:var(--red);color:#fff}
 
@@ -146,7 +146,12 @@ dialog h3{font-size:1.4rem}
 
   <!-- Signed in -->
   <section id="v-app" hidden>
-    <div class="panel">
+    <div class="panel" id="no-card" hidden>
+      <span class="eyebrow">Admin</span>
+      <h1 style="font-size:1.9rem;margin:6px 0 6px">Welcome back</h1>
+      <p>Your account is an admin without a card on the Team page. Use the tools below to manage the site.</p>
+    </div>
+    <div class="panel" id="me-panel">
       <div class="me">
         <div class="me-card" id="me-card"></div>
         <div>
@@ -182,6 +187,8 @@ dialog h3{font-size:1.4rem}
         <div class="tabs" role="tablist">
           <button type="button" role="tab" id="t-team" aria-selected="true">Team</button>
           <button type="button" role="tab" id="t-access" aria-selected="false">Who can sign in</button>
+          <button type="button" role="tab" id="t-requests" aria-selected="false">Member requests <span class="badge" id="req-count" hidden></span></button>
+          <button type="button" role="tab" id="t-resources" aria-selected="false">Resources</button>
         </div>
       </div>
 
@@ -197,13 +204,41 @@ dialog h3{font-size:1.4rem}
         <div class="panel" style="padding:24px;margin-bottom:14px">
           <form id="access-form" class="grid2" style="align-items:end">
             <label>Google email <input type="email" id="a-email" required placeholder="their.name@gmail.com"></label>
-            <label>Their card <select id="a-member" required></select></label>
+            <label>Their card <select id="a-member"></select></label>
             <label class="check"><input type="checkbox" id="a-admin"> Make admin</label>
             <div class="row" style="justify-content:flex-end"><button class="btn btn-red btn-sm" type="submit">Give access</button></div>
           </form>
           <p class="status" id="access-status" hidden style="margin-top:12px"></p>
         </div>
         <div class="list" id="access"></div>
+      </div>
+
+      <div id="p-requests" hidden>
+        <p style="margin-bottom:14px">People who asked for the <a href="members.html">members area</a> (Alumni Directory and Resource Database). Approve anyone you recognise as an ABS member or alum.</p>
+        <h3 style="font-size:1.1rem;margin:0 0 10px">Waiting for approval</h3>
+        <div class="list" id="req-pending"></div>
+        <h3 style="font-size:1.1rem;margin:28px 0 10px">Approved</h3>
+        <div class="list" id="req-approved"></div>
+        <h3 style="font-size:1.1rem;margin:28px 0 10px">Declined</h3>
+        <div class="list" id="req-declined"></div>
+        <p class="status" id="req-status" hidden style="margin-top:12px"></p>
+      </div>
+
+      <div id="p-resources" hidden>
+        <div class="panel" style="padding:24px;margin-bottom:14px">
+          <form id="res-form" novalidate>
+            <div class="grid2">
+              <label>Title <input type="text" id="r-title" maxlength="120" placeholder="Investment banking interview guide"></label>
+              <label>Category <input type="text" id="r-cat" maxlength="40" list="r-cats" placeholder="Interview Prep"></label>
+            </div>
+            <datalist id="r-cats"><option>Recruiting</option><option>Interview Prep</option><option>Résumés &amp; Cover Letters</option><option>Technical Skills</option><option>Networking</option><option>Athlete Life</option></datalist>
+            <label>Link <span class="hint">Google Drive, Notion, a website… Make sure sharing is on for anyone with the link.</span><input type="url" id="r-url" maxlength="500" placeholder="https://"></label>
+            <label>Description <span class="hint">Optional</span><textarea id="r-desc" maxlength="500" style="min-height:70px"></textarea></label>
+            <div class="row"><button class="btn btn-red btn-sm" type="submit" id="r-save">Add resource</button><button class="btn btn-line btn-sm" type="button" id="r-cancel" hidden>Cancel editing</button></div>
+            <p class="status" id="res-status" hidden></p>
+          </form>
+        </div>
+        <div class="list" id="res-admin"></div>
       </div>
     </div>
   </section>
@@ -294,7 +329,7 @@ onAuthStateChanged(auth, async user => {
     await loadMembers();
     renderMe();
     $("admin").hidden = !me.admin;
-    if (me.admin) { renderMembers(); await loadAccess(); }
+    if (me.admin) { renderMembers(); await loadAccess(); loadRequests(); }
     show("v-app");
   } catch (e) {
     $("denied-email").textContent = email;
@@ -310,6 +345,10 @@ async function loadMembers(){
 
 // ---------- My card ----------
 function renderMe(){
+  // Admins can have access without a card on the Team page
+  $("no-card").hidden = !!me.memberId;
+  $("me-panel").hidden = !me.memberId;
+  if (!me.memberId) return;
   const m = members.find(x => x.id === me.memberId);
   $("me-form").hidden = !m;
   $("me-missing").hidden = !!m;
@@ -338,14 +377,16 @@ $("me-form").addEventListener("submit", async e => {
 });
 
 // ---------- Admin: tabs ----------
+const TABS = ["team", "access", "requests", "resources"];
 function tab(which){
-  $("t-team").setAttribute("aria-selected", which === "team");
-  $("t-access").setAttribute("aria-selected", which === "access");
-  $("p-team").hidden = which !== "team";
-  $("p-access").hidden = which !== "access";
+  TABS.forEach(t => {
+    $("t-" + t).setAttribute("aria-selected", t === which);
+    $("p-" + t).hidden = t !== which;
+  });
+  if (which === "requests") loadRequests();
+  if (which === "resources") loadResources();
 }
-$("t-team").onclick = () => tab("team");
-$("t-access").onclick = () => tab("access");
+TABS.forEach(t => $("t-" + t).onclick = () => tab(t));
 
 // ---------- Admin: team ----------
 function renderMembers(){
@@ -428,16 +469,23 @@ $("m-dialog").addEventListener("close", () => { delete $("m-delete").dataset.con
 
 // ---------- Admin: who can sign in ----------
 function fillMemberSelect(){
-  $("a-member").innerHTML = members.map(m => `<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("");
+  $("a-member").innerHTML = `<option value="">Admin only (no card)</option>` +
+    members.map(m => `<option value="${esc(m.id)}">${esc(m.name)}</option>`).join("");
 }
+$("a-member").addEventListener("change", () => {
+  // Choosing "Admin only" makes them an admin; a card-less exec account would have nothing to do
+  const adminOnly = !$("a-member").value;
+  $("a-admin").checked = adminOnly || $("a-admin").checked;
+  $("a-admin").disabled = adminOnly;
+});
 async function loadAccess(){
   const snap = await getDocs(collection(db, "access"));
   const rows = snap.docs.map(d => ({ email: d.id, ...d.data() })).sort((a, b) => a.email.localeCompare(b.email));
-  const nameOf = id => (members.find(m => m.id === id) || {}).name || id;
+  const nameOf = id => id ? ((members.find(m => m.id === id) || {}).name || id) : "Admin only (no card)";
   $("access").innerHTML = rows.length ? rows.map(r => `
     <div class="item">
       <div class="av ini">${esc(initials(nameOf(r.memberId)))}</div>
-      <div class="info"><b>${esc(r.email)}${r.admin ? '<span class="badge">Admin</span>' : ""}</b><small>Edits: ${esc(nameOf(r.memberId))}</small></div>
+      <div class="info"><b>${esc(r.email)}${r.admin ? '<span class="badge">Admin</span>' : ""}</b><small>${r.memberId ? "Edits: " : ""}${esc(nameOf(r.memberId))}</small></div>
       ${r.email === me.email ? '<span class="badge grey">You</span>' : `<button class="btn btn-danger btn-sm" type="button" data-revoke="${esc(r.email)}">Remove</button>`}
     </div>`).join("") : `<div class="empty">No one has access yet.</div>`;
   $("access").querySelectorAll("[data-revoke]").forEach(b => b.onclick = async () => {
@@ -447,14 +495,87 @@ async function loadAccess(){
   });
   fillMemberSelect();
 }
+// ---------- Admin: members area requests ----------
+async function loadRequests(){
+  let rows = [];
+  try {
+    const snap = await getDocs(collection(db, "users"));
+    rows = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+  } catch (err) { return setStatus($("req-status"), "err", friendly(err)); }
+  const when = r => (r.createdAt && r.createdAt.toMillis) ? r.createdAt.toMillis() : 0;
+  rows.sort((a, b) => when(b) - when(a));
+  const line = (r, actions) => `
+    <div class="item">
+      <div class="av ini">${esc(initials(r.name || r.email))}</div>
+      <div class="info"><b>${esc(r.name)}<span class="badge grey">${r.type === "alumni" ? "Alum" : "Member"}${r.gradYear ? " · " + esc(r.gradYear) : ""}</span></b><small>${esc(r.email)}</small></div>
+      <div class="row" style="gap:6px">${actions}</div>
+    </div>`;
+  const btn = (uid, status, label, cls) => `<button class="btn ${cls} btn-sm" type="button" data-uid="${esc(uid)}" data-status="${status}">${label}</button>`;
+  const pending = rows.filter(r => r.status === "pending");
+  const approved = rows.filter(r => r.status === "approved");
+  const declined = rows.filter(r => r.status === "declined");
+  $("req-pending").innerHTML = pending.length ? pending.map(r => line(r, btn(r.uid, "approved", "Approve", "btn-red") + btn(r.uid, "declined", "Decline", "btn-line"))).join("") : `<div class="empty">No one is waiting.</div>`;
+  $("req-approved").innerHTML = approved.length ? approved.map(r => line(r, btn(r.uid, "declined", "Remove access", "btn-danger"))).join("") : `<div class="empty">No approved members yet.</div>`;
+  $("req-declined").innerHTML = declined.length ? declined.map(r => line(r, btn(r.uid, "approved", "Approve", "btn-line"))).join("") : `<div class="empty">None.</div>`;
+  $("req-count").hidden = !pending.length;
+  $("req-count").textContent = pending.length;
+  document.querySelectorAll("#p-requests [data-uid]").forEach(b => b.onclick = async () => {
+    try { await updateDoc(doc(db, "users", b.dataset.uid), { status: b.dataset.status }); setStatus($("req-status"), "", ""); loadRequests(); }
+    catch (err) { setStatus($("req-status"), "err", friendly(err)); }
+  });
+}
+
+// ---------- Admin: resources ----------
+let resources = [], editingRes = null;
+async function loadResources(){
+  try {
+    const snap = await getDocs(collection(db, "resources"));
+    resources = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => String(a.category).localeCompare(b.category) || String(a.title).localeCompare(b.title));
+  } catch (err) { return setStatus($("res-status"), "err", friendly(err)); }
+  $("res-admin").innerHTML = resources.length ? resources.map(r => `
+    <div class="item">
+      <div class="av ini" style="font-family:var(--body);font-size:.75rem">${esc((r.category || "—").slice(0, 3).toUpperCase())}</div>
+      <div class="info"><b>${esc(r.title)}</b><small>${esc(r.category || "No category")} · <a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.url)}</a></small></div>
+      <div class="row" style="gap:6px"><button class="btn btn-line btn-sm" type="button" data-redit="${esc(r.id)}">Edit</button><button class="btn btn-danger btn-sm" type="button" data-rdel="${esc(r.id)}">Delete</button></div>
+    </div>`).join("") : `<div class="empty">No resources yet. Add the first one above.</div>`;
+  document.querySelectorAll("[data-redit]").forEach(b => b.onclick = () => {
+    const r = resources.find(x => x.id === b.dataset.redit); editingRes = r.id;
+    $("r-title").value = r.title || ""; $("r-cat").value = r.category || ""; $("r-url").value = r.url || ""; $("r-desc").value = r.description || "";
+    $("r-save").textContent = "Save changes"; $("r-cancel").hidden = false; $("r-title").focus();
+  });
+  document.querySelectorAll("[data-rdel]").forEach(b => b.onclick = async () => {
+    if (b.dataset.confirm !== "1") { b.dataset.confirm = "1"; b.textContent = "Click again"; return; }
+    try { await deleteDoc(doc(db, "resources", b.dataset.rdel)); loadResources(); }
+    catch (err) { setStatus($("res-status"), "err", friendly(err)); }
+  });
+}
+function resetResForm(){ editingRes = null; $("res-form").reset(); $("r-save").textContent = "Add resource"; $("r-cancel").hidden = true; }
+$("r-cancel").onclick = resetResForm;
+$("res-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const data = { title: $("r-title").value.trim(), category: $("r-cat").value.trim(), url: $("r-url").value.trim(), description: $("r-desc").value.trim() };
+  if (!data.title) return setStatus($("res-status"), "err", "Give the resource a title.");
+  if (!/^https?:\/\/.+/i.test(data.url)) return setStatus($("res-status"), "err", "Paste the full link, starting with https://");
+  try {
+    const id = editingRes || (slug(data.title).slice(0, 60) + "-" + Date.now().toString(36));
+    await setDoc(doc(db, "resources", id), data);
+    setStatus($("res-status"), "ok", editingRes ? "Saved." : "Added. Approved members can see it now.");
+    resetResForm(); loadResources();
+  } catch (err) { setStatus($("res-status"), "err", friendly(err)); }
+});
+
 $("access-form").addEventListener("submit", async e => {
   e.preventDefault();
   const email = $("a-email").value.trim().toLowerCase();
   if (!EMAIL.test(email)) return setStatus($("access-status"), "err", "Enter the full Google email address.");
-  if (!$("a-member").value) return setStatus($("access-status"), "err", "Add the person to the team first, then give them access.");
+  const memberId = $("a-member").value;
+  const admin = !memberId || $("a-admin").checked;
   try {
-    await setDoc(doc(db, "access", email), { memberId: $("a-member").value, admin: $("a-admin").checked });
+    await setDoc(doc(db, "access", email), { memberId, admin });
     $("access-form").reset();
+    $("a-admin").disabled = false;
+    fillMemberSelect();
     setStatus($("access-status"), "ok", email + " can now sign in.");
     await loadAccess();
   } catch (err) { setStatus($("access-status"), "err", friendly(err)); }

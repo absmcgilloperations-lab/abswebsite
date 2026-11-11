@@ -64,5 +64,66 @@ service cloud.firestore {
         && request.resource.data.admin is bool;
       allow delete: if isAdmin() && email != myEmail();
     }
+
+    // ---------- Members area (members.html) ----------
+    // users/{uid}     An account request: { name, email, type, gradYear, status }. status starts "pending";
+    //                 only admins can set it to "approved" or "declined".
+    // alumni/{uid}    A directory profile. Approved users read; each alumnus edits their own.
+    // resources/{id}  A link in the Resource Database. Approved users read; admins edit.
+
+    function myUser() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function isApproved() {
+      return request.auth != null && (
+        isAdmin()
+        || (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && myUser().status == 'approved'));
+    }
+    function validUserFields(d) {
+      return d.name is string && d.name.size() > 0 && d.name.size() <= 80
+        && d.type in ['member', 'alumni']
+        && (!('gradYear' in d) || d.gradYear == null || (d.gradYear is int && d.gradYear >= 1950 && d.gradYear <= 2040));
+    }
+    function validAlumni(d) {
+      return d.keys().hasOnly(['name', 'gradYear', 'sport', 'program', 'company', 'role', 'industry', 'city', 'linkedin', 'email', 'mentor', 'bio', 'updatedAt'])
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 80
+        && (!('gradYear' in d) || d.gradYear == null || d.gradYear is int)
+        && validText(d, 'sport', 60) && validText(d, 'program', 80) && validText(d, 'company', 80)
+        && validText(d, 'role', 80) && validText(d, 'industry', 40) && validText(d, 'city', 60)
+        && validText(d, 'email', 120) && validText(d, 'bio', 600) && validLinkedIn(d)
+        && (!('mentor' in d) || d.mentor is bool);
+    }
+    function validResource(d) {
+      return d.title is string && d.title.size() > 0 && d.title.size() <= 120
+        && d.url is string && d.url.size() <= 500 && d.url.matches('https?://.+')
+        && validText(d, 'category', 40) && validText(d, 'description', 500);
+    }
+
+    match /users/{uid} {
+      allow read: if (request.auth != null && request.auth.uid == uid) || isAdmin();
+      allow create: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'email', 'type', 'gradYear', 'status', 'createdAt'])
+        && request.resource.data.status == 'pending'
+        && request.resource.data.email == request.auth.token.email
+        && validUserFields(request.resource.data);
+      allow update: if isAdmin()
+        || (request.auth != null && request.auth.uid == uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'type', 'gradYear'])
+            && validUserFields(request.resource.data));
+      allow delete: if isAdmin();
+    }
+
+    match /alumni/{uid} {
+      allow read: if isApproved();
+      allow create, update: if validAlumni(request.resource.data)
+        && (isAdmin() || (isApproved() && request.auth.uid == uid));
+      allow delete: if isAdmin() || (request.auth != null && request.auth.uid == uid);
+    }
+
+    match /resources/{id} {
+      allow read: if isApproved();
+      allow create, update: if isAdmin() && validResource(request.resource.data);
+      allow delete: if isAdmin();
+    }
   }
 }

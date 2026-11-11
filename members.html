@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ABS Members Area</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Barlow:wght@400;500;600&family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#ED1B2F; --red-dark:#C41526; --red-soft:#FDE8EA;
+  --ink:#1B1B1D; --text:#4A4A4F; --muted:#7A7A80;
+  --cream:#F7F3EC; --line:#E6E0D6; --white:#FFFFFF; --black:#0B0B0C;
+  --ok:#1F7A4D; --ok-soft:#E3F3EA;
+  --head:"Oswald","Arial Narrow",Arial,sans-serif;
+  --body:"Barlow","Helvetica Neue",Arial,sans-serif;
+  --serif:"Cormorant Garamond",Garamond,serif;
+  --r-sm:12px; --r:18px; --r-lg:28px; --pill:999px;
+  --shadow:0 18px 44px -26px rgba(27,27,29,.35);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+h1,h2,h3{font-family:var(--head);color:var(--ink);text-transform:uppercase;margin:0;line-height:1.15;font-weight:600;letter-spacing:.01em}
+p{margin:0}
+a{color:inherit}
+button,input,select,textarea{font:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:var(--r-sm)}
+[hidden]{display:none!important}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+
+.top{background:var(--black);color:#fff}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
+.brand .abs{font-family:var(--serif);font-weight:700;font-size:1.8rem;letter-spacing:.06em;line-height:1}
+.brand .bar{width:1px;height:24px;background:var(--red)}
+.brand .full{font-family:var(--head);font-size:.85rem;letter-spacing:.12em;text-transform:uppercase}
+.top-right{display:flex;align-items:center;gap:10px;font-size:.9rem}
+.top-right .who{color:rgba(255,255,255,.75);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:600px){.top-right .who{display:none}.brand .bar,.brand .full{display:none}}
+
+.hero{background:linear-gradient(rgba(11,11,12,.72),rgba(11,11,12,.82)),url("assets/hero-mcgill.jpg") center 35%/cover;color:#fff;padding:56px 0 64px;border-radius:0 0 var(--r-lg) var(--r-lg)}
+.hero h1{color:#fff;font-size:clamp(2rem,5vw,3.2rem)}
+.hero p{color:rgba(255,255,255,.85);max-width:56ch;margin-top:10px}
+.eyebrow{font-family:var(--head);font-weight:500;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--red)}
+.hero .eyebrow{color:#ff8792}
+
+main{padding:36px 0 80px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:var(--pill);border:1px solid transparent;font-weight:500;font-size:.95rem;cursor:pointer;text-decoration:none;transition:background .2s,border-color .2s,color .2s}
+.btn:disabled{opacity:.55;cursor:default}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover:not(:disabled){background:var(--red-dark)}
+.btn-line{background:#fff;border-color:var(--line);color:var(--ink)}.btn-line:hover:not(:disabled){border-color:var(--red);color:var(--red)}
+.btn-ghost{background:transparent;border-color:rgba(255,255,255,.4);color:#fff;padding:7px 16px;font-size:.88rem}.btn-ghost:hover{background:#fff;color:var(--ink)}
+.btn-sm{padding:7px 14px;font-size:.86rem}
+.btn svg{width:18px;height:18px;flex:none}
+.link{background:none;border:0;padding:0;color:var(--red);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+.panel{background:#fff;border-radius:var(--r-lg);padding:32px;box-shadow:var(--shadow)}
+.narrow{max-width:480px;margin:0 auto}
+.stack{display:grid;gap:16px}
+.center{text-align:center}
+.divider{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.85rem}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+
+form{display:grid;gap:16px}
+label{display:grid;gap:6px;font-weight:600;color:var(--ink);font-size:.95rem}
+label .hint{font-weight:400;color:var(--muted);font-size:.85rem}
+input[type=text],input[type=email],input[type=password],input[type=url],input[type=number],input[type=search],select,textarea{width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink);font-size:1rem}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px var(--red-soft)}
+textarea{min-height:110px;resize:vertical}
+.check{display:flex;align-items:center;gap:10px;font-weight:500}
+.check input{width:18px;height:18px;accent-color:var(--red)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--cream);padding:5px;border-radius:var(--pill)}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{display:block;text-align:center;padding:9px 12px;border-radius:var(--pill);cursor:pointer;font-weight:500}
+.seg input:checked+label{background:#fff;color:var(--red);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.seg input:focus-visible+label{outline:2px solid var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:600px){.grid2{grid-template-columns:1fr}}
+.status{font-size:.92rem;padding:10px 14px;border-radius:var(--r-sm)}
+.status.ok{background:var(--ok-soft);color:var(--ok)}
+.status.err{background:var(--red-soft);color:var(--red-dark)}
+.status.info{background:var(--cream);color:var(--ink)}
+
+.icon-circle{width:72px;height:72px;border-radius:50%;background:var(--red-soft);display:grid;place-items:center;margin:0 auto}
+.icon-circle svg{width:36px;height:36px;color:var(--red)}
+
+/* Members app */
+.tabs{display:inline-flex;gap:6px;background:#fff;padding:5px;border-radius:var(--pill);border:1px solid var(--line);margin-bottom:22px;flex-wrap:wrap}
+.tabs button{border:0;background:none;padding:9px 20px;border-radius:var(--pill);cursor:pointer;font-weight:500;color:var(--ink)}
+.tabs button[aria-selected="true"]{background:var(--red);color:#fff}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+.toolbar input[type=search]{flex:1 1 260px;border-radius:var(--pill);padding-left:18px}
+.toolbar select{flex:0 1 220px;border-radius:var(--pill)}
+.toolbar .check{background:#fff;border:1px solid var(--line);padding:8px 14px;border-radius:var(--pill);font-size:.92rem}
+.count{color:var(--muted);font-size:.9rem;margin-bottom:12px}
+
+.alumni-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:960px){.alumni-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.alumni-grid{grid-template-columns:1fr}}
+.al{background:#fff;border-radius:var(--r);padding:20px;display:grid;gap:12px;align-content:start;border:1px solid transparent;transition:border-color .2s,box-shadow .2s}
+.al:hover{border-color:var(--line);box-shadow:var(--shadow)}
+.al-top{display:flex;gap:14px;align-items:center}
+.al-av{flex:none;width:52px;height:52px;border-radius:50%;background:linear-gradient(140deg,var(--red),var(--red-dark));color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:700;font-size:1.2rem}
+.al-name{font-family:var(--head);text-transform:uppercase;color:var(--ink);font-size:1.1rem;font-weight:600;line-height:1.2}
+.al-sub{color:var(--muted);font-size:.86rem}
+.al-job{color:var(--ink);font-weight:500;line-height:1.35}
+.al-job span{color:var(--muted);font-weight:400}
+.al-meta{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:var(--pill);background:var(--cream);color:var(--ink)}
+.tag.red{background:var(--red-soft);color:var(--red)}
+.al-bio{font-size:.92rem}
+.al-actions{display:flex;flex-wrap:wrap;gap:8px}
+
+.res-list{display:grid;gap:12px}
+.res{background:#fff;border-radius:var(--r);padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center}
+.res h3{font-family:var(--body);text-transform:none;font-size:1.08rem;font-weight:600;margin:6px 0 2px;letter-spacing:0}
+.res p{font-size:.92rem}
+@media (max-width:560px){.res{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{font-weight:500;font-size:.88rem;padding:7px 14px;border-radius:var(--pill);border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff}
+.empty{background:#fff;border-radius:var(--r);padding:32px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="abs">ABS</span><span class="bar"></span><span class="full">Members Area</span></a>
+    <div class="top-right">
+      <span class="who" id="who"></span>
+      <a class="btn btn-ghost" href="index.html">Main site</a>
+      <button class="btn btn-ghost" id="signout" type="button" hidden>Sign out</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">For ABS members and alumni</span>
+    <h1>Members area</h1>
+    <p>The Alumni Directory and Resource Database are open to approved ABS members and alumni. Create an account and an exec will approve it.</p>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <section id="v-loading" class="panel narrow center"><p>Loading…</p></section>
+
+  <!-- Signed out: sign in or create an account -->
+  <section id="v-auth" class="panel narrow stack" hidden>
+    <div class="seg" role="radiogroup" aria-label="Sign in or create an account">
+      <input type="radio" name="mode" id="mode-in" value="in" checked><label for="mode-in">Sign in</label>
+      <input type="radio" name="mode" id="mode-up" value="up"><label for="mode-up">Create account</label>
+    </div>
+    <button class="btn btn-red" id="google" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.4a4.6 4.6 0 0 1-2 3v2.5h3.2c1.9-1.7 3-4.3 3-7.3z"/><path fill="#fff" d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1-2.6 0-4.8-1.8-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22z" opacity=".85"/><path fill="#fff" d="M6.4 14c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.4H3.1A10 10 0 0 0 2 12c0 1.6.4 3.1 1.1 4.6L6.4 14z" opacity=".7"/><path fill="#fff" d="M12 5.9c1.5 0 2.8.5 3.8 1.5l2.9-2.9A10 10 0 0 0 3.1 7.4L6.4 10c.8-2.3 3-4.1 5.6-4.1z" opacity=".9"/></svg>
+      <span id="google-label">Continue with Google</span>
+    </button>
+    <div class="divider">or use your email</div>
+    <form id="email-form" novalidate>
+      <div id="signup-fields" class="stack" hidden>
+        <label>Full name <input type="text" id="u-name" maxlength="80" autocomplete="name"></label>
+        <div class="grid2">
+          <label>I am a <select id="u-type"><option value="member">Current member</option><option value="alumni">Alumnus / alumna</option></select></label>
+          <label>Grad year <input type="number" id="u-year" min="1950" max="2040" placeholder="2027"></label>
+        </div>
+      </div>
+      <label>Email <input type="email" id="u-email" autocomplete="email" required></label>
+      <label>Password <span class="hint" id="pw-hint" hidden>At least 8 characters.</span>
+        <input type="password" id="u-pass" autocomplete="current-password" required minlength="8">
+      </label>
+      <button class="btn btn-red" type="submit" id="email-submit">Sign in</button>
+      <button class="link" type="button" id="forgot">Forgot your password?</button>
+    </form>
+    <p class="status" id="auth-status" hidden></p>
+  </section>
+
+  <!-- Signed in with Google but no request yet -->
+  <section id="v-request" class="panel narrow" hidden>
+    <span class="eyebrow">One more step</span>
+    <h2 style="font-size:1.7rem;margin:6px 0 10px">Request access</h2>
+    <p style="margin-bottom:18px">Tell us who you are so an exec can approve your account.</p>
+    <form id="request-form" novalidate>
+      <label>Full name <input type="text" id="r-name" maxlength="80" required></label>
+      <div class="grid2">
+        <label>I am a <select id="r-type"><option value="member">Current member</option><option value="alumni">Alumnus / alumna</option></select></label>
+        <label>Grad year <input type="number" id="r-year" min="1950" max="2040" placeholder="2027"></label>
+      </div>
+      <button class="btn btn-red" type="submit">Send request</button>
+      <p class="status" id="request-status" hidden></p>
+    </form>
+  </section>
+
+  <!-- Waiting for approval -->
+  <section id="v-pending" class="panel narrow center stack" hidden>
+    <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+    <h2 style="font-size:1.7rem">Waiting for approval</h2>
+    <p>Thanks, <b id="pending-name"></b>. An ABS exec will review your request soon. Check back here once you've been approved.</p>
+    <div id="verify-box" class="stack" hidden>
+      <p class="status info">Please also confirm your email address using the link we sent to <b id="verify-email"></b>.</p>
+      <button class="btn btn-line btn-sm" id="resend" type="button">Send the link again</button>
+    </div>
+  </section>
+
+  <!-- Declined -->
+  <section id="v-declined" class="panel narrow center stack" hidden>
+    <h2 style="font-size:1.7rem">Request not approved</h2>
+    <p>Your request for the members area wasn't approved. If you think this is a mistake, message ABS on <a href="https://www.instagram.com/mcgillabs_/" target="_blank" rel="noopener">Instagram</a>.</p>
+  </section>
+
+  <!-- Approved -->
+  <section id="v-app" hidden>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" id="tab-dir" aria-selected="true">Alumni Directory</button>
+      <button type="button" role="tab" id="tab-res" aria-selected="false">Resource Database</button>
+      <button type="button" role="tab" id="tab-me" aria-selected="false" hidden>My directory profile</button>
+    </div>
+
+    <div id="p-dir">
+      <div class="toolbar">
+        <input type="search" id="dir-q" placeholder="Search by name, company, role or city" aria-label="Search the directory">
+        <select id="dir-industry" aria-label="Filter by industry"><option value="">All industries</option></select>
+        <label class="check"><input type="checkbox" id="dir-mentor"> Open to mentoring</label>
+      </div>
+      <p class="count" id="dir-count"></p>
+      <div class="alumni-grid" id="dir-list"></div>
+    </div>
+
+    <div id="p-res" hidden>
+      <div class="toolbar"><input type="search" id="res-q" placeholder="Search resources" aria-label="Search resources"></div>
+      <div class="chips" id="res-chips" role="group" aria-label="Filter by category"></div>
+      <div class="res-list" id="res-list"></div>
+    </div>
+
+    <div id="p-me" hidden>
+      <div class="panel">
+        <span class="eyebrow">Your listing</span>
+        <h2 style="font-size:1.7rem;margin:6px 0 6px">My directory profile</h2>
+        <p style="margin-bottom:20px">Only approved ABS members and alumni can see this. Leave anything blank you'd rather not share.</p>
+        <form id="me-form" novalidate>
+          <div class="grid2">
+            <label>Full name <input type="text" id="m-name" maxlength="80" required></label>
+            <label>Grad year <input type="number" id="m-year" min="1950" max="2040"></label>
+            <label>Varsity sport <input type="text" id="m-sport" maxlength="60" placeholder="Rugby"></label>
+            <label>Program <input type="text" id="m-program" maxlength="80" placeholder="B.Com Finance"></label>
+            <label>Company <input type="text" id="m-company" maxlength="80"></label>
+            <label>Role <input type="text" id="m-role" maxlength="80"></label>
+            <label>Industry <select id="m-industry"></select></label>
+            <label>City <input type="text" id="m-city" maxlength="60" placeholder="Toronto"></label>
+            <label>LinkedIn <input type="url" id="m-linkedin" maxlength="200" placeholder="https://www.linkedin.com/in/your-name/"></label>
+            <label>Contact email <input type="email" id="m-email" maxlength="120"></label>
+          </div>
+          <label class="check"><input type="checkbox" id="m-mentor"> I'm open to mentoring current ABS members</label>
+          <label>Short bio <textarea id="m-bio" maxlength="600" placeholder="What you do now and how you got there."></textarea></label>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between">
+            <button class="btn btn-red" type="submit" id="m-save">Save profile</button>
+            <button class="btn btn-line" type="button" id="m-remove" hidden>Remove me from the directory</button>
+          </div>
+          <p class="status" id="me-status" hidden></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script type="module">
+import { firebaseConfig } from "./firebase-config.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
+  sendEmailVerification, updateProfile } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import { getFirestore, doc, getDoc, getDocs, setDoc, deleteDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const INDUSTRIES = ["Finance", "Consulting", "Technology", "Law", "Real Estate", "Sports Business", "Marketing", "Entrepreneurship", "Healthcare", "Government", "Other"];
+const $ = id => document.getElementById(id);
+const views = ["v-loading", "v-auth", "v-request", "v-pending", "v-declined", "v-app"];
+const show = v => views.forEach(x => $(x).hidden = x !== v);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const initials = n => { const p = String(n).trim().split(/\s+/); return ((p[0]||"?")[0] + (p.length > 1 ? p[p.length-1][0] : "")).toUpperCase(); };
+const LINKEDIN = /^https:\/\/([a-z]+\.)?linkedin\.com\/.+/i;
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const year = v => { const n = parseInt(v, 10); return n >= 1950 && n <= 2040 ? n : null; };
+function setStatus(el, kind, msg){ el.hidden = !msg; el.className = "status " + (kind || ""); el.textContent = msg || ""; }
+function friendly(e){
+  const c = (e && e.code) || "";
+  const map = {
+    "auth/invalid-credential": "That email and password don't match. Try again, or reset your password.",
+    "auth/wrong-password": "That email and password don't match. Try again, or reset your password.",
+    "auth/user-not-found": "There's no account with that email. Choose Create account instead.",
+    "auth/email-already-in-use": "There's already an account with that email. Choose Sign in instead.",
+    "auth/weak-password": "Use a password with at least 8 characters.",
+    "auth/invalid-email": "That email address doesn't look right.",
+    "auth/too-many-requests": "Too many attempts. Wait a few minutes and try again.",
+    "auth/popup-closed-by-user": "The Google window was closed before you finished.",
+    "auth/popup-blocked": "Your browser blocked the Google window. Allow pop-ups for this site and try again.",
+    "auth/operation-not-allowed": "That sign-in method isn't turned on yet. Message ABS on Instagram.",
+    "permission-denied": "You don't have permission to do that."
+  };
+  for (const k in map) if (c.includes(k)) return map[k];
+  return "Something went wrong (" + (c || (e && e.message) || "unknown error") + ").";
+}
+
+// ---------- Sign in / create account ----------
+function mode(){ return document.querySelector('input[name=mode]:checked').value; }
+function applyMode(){
+  const up = mode() === "up";
+  $("signup-fields").hidden = !up;
+  $("pw-hint").hidden = !up;
+  $("u-pass").autocomplete = up ? "new-password" : "current-password";
+  $("email-submit").textContent = up ? "Create account" : "Sign in";
+  $("google-label").textContent = up ? "Sign up with Google" : "Continue with Google";
+  $("forgot").hidden = up;
+  setStatus($("auth-status"), "", "");
+}
+document.querySelectorAll("input[name=mode]").forEach(r => r.addEventListener("change", applyMode));
+
+$("google").onclick = async () => {
+  setStatus($("auth-status"), "", "");
+  try { await signInWithPopup(auth, new GoogleAuthProvider()); }
+  catch (e) { setStatus($("auth-status"), "err", friendly(e)); }
+};
+
+let pendingSignup = null; // details typed on the Create account form, used once the account exists
+$("email-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const email = $("u-email").value.trim(), pass = $("u-pass").value;
+  if (!EMAIL.test(email)) return setStatus($("auth-status"), "err", "Enter your email address.");
+  if (mode() === "up") {
+    const name = $("u-name").value.trim();
+    if (!name) return setStatus($("auth-status"), "err", "Enter your full name.");
+    if (pass.length < 8) return setStatus($("auth-status"), "err", "Use a password with at least 8 characters.");
+    pendingSignup = { name, type: $("u-type").value, gradYear: year($("u-year").value) };
+    $("email-submit").disabled = true;
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(cred.user, { displayName: name });
+      sendEmailVerification(cred.user).catch(() => {});
+    } catch (err) { pendingSignup = null; setStatus($("auth-status"), "err", friendly(err)); }
+    $("email-submit").disabled = false;
+  } else {
+    if (!pass) return setStatus($("auth-status"), "err", "Enter your password.");
+    $("email-submit").disabled = true;
+    try { await signInWithEmailAndPassword(auth, email, pass); }
+    catch (err) { setStatus($("auth-status"), "err", friendly(err)); }
+    $("email-submit").disabled = false;
+  }
+});
+$("forgot").onclick = async () => {
+  const email = $("u-email").value.trim();
+  if (!EMAIL.test(email)) return setStatus($("auth-status"), "err", "Type your email above first, then choose Forgot your password.");
+  try { await sendPasswordResetEmail(auth, email); setStatus($("auth-status"), "ok", "If there's an account for " + email + ", a reset link is on its way."); }
+  catch (err) { setStatus($("auth-status"), "err", friendly(err)); }
+};
+$("signout").onclick = () => signOut(auth);
+$("resend").onclick = async () => {
+  try { await sendEmailVerification(auth.currentUser); $("resend").textContent = "Sent. Check your inbox."; $("resend").disabled = true; }
+  catch (e) { $("resend").textContent = "Couldn't send. Try again in a few minutes."; }
+};
+
+// ---------- Who is this and what can they see? ----------
+let profile = null;   // users/{uid}
+let isExecAdmin = false;
+
+onAuthStateChanged(auth, async user => {
+  $("signout").hidden = !user;
+  $("who").textContent = user ? user.email : "";
+  if (!user) { profile = null; show("v-auth"); return; }
+  show("v-loading");
+  try {
+    isExecAdmin = false;
+    if (user.emailVerified) {
+      try { const a = await getDoc(doc(db, "access", user.email.toLowerCase())); isExecAdmin = a.exists() && a.data().admin === true; } catch (_) {}
+    }
+    const ref = doc(db, "users", user.uid);
+    let snap = await getDoc(ref);
+    if (!snap.exists() && pendingSignup) {
+      await setDoc(ref, { ...pendingSignup, email: user.email, status: "pending", createdAt: serverTimestamp() });
+      pendingSignup = null;
+      snap = await getDoc(ref);
+    }
+    profile = snap.exists() ? snap.data() : null;
+    if (isExecAdmin) return openApp(user);
+    if (!profile) {
+      $("r-name").value = user.displayName || "";
+      return show("v-request");
+    }
+    if (profile.status === "approved") return openApp(user);
+    if (profile.status === "declined") return show("v-declined");
+    $("pending-name").textContent = profile.name.split(" ")[0];
+    const needsVerify = !user.emailVerified;
+    $("verify-box").hidden = !needsVerify;
+    $("verify-email").textContent = user.email;
+    show("v-pending");
+  } catch (e) {
+    console.error(e);
+    setStatus($("auth-status"), "err", friendly(e));
+    show("v-auth");
+  }
+});
+
+$("request-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const name = $("r-name").value.trim();
+  if (!name) return setStatus($("request-status"), "err", "Enter your full name.");
+  const user = auth.currentUser;
+  try {
+    await setDoc(doc(db, "users", user.uid), { name, type: $("r-type").value, gradYear: year($("r-year").value), email: user.email, status: "pending", createdAt: serverTimestamp() });
+    profile = { name, status: "pending" };
+    $("pending-name").textContent = name.split(" ")[0];
+    $("verify-box").hidden = user.emailVerified;
+    show("v-pending");
+  } catch (err) { setStatus($("request-status"), "err", friendly(err)); }
+});
+
+// ---------- Members app ----------
+let alumni = [], resources = [], resFilter = "All";
+INDUSTRIES.forEach(i => {
+  $("dir-industry").insertAdjacentHTML("beforeend", `<option>${esc(i)}</option>`);
+  $("m-industry").insertAdjacentHTML("beforeend", `<option>${esc(i)}</option>`);
+});
+$("m-industry").insertAdjacentHTML("afterbegin", `<option value="">Choose one</option>`);
+
+function tab(which){
+  [["dir","tab-dir","p-dir"],["res","tab-res","p-res"],["me","tab-me","p-me"]].forEach(([k, t, p]) => {
+    $(t).setAttribute("aria-selected", k === which);
+    $(p).hidden = k !== which;
+  });
+}
+$("tab-dir").onclick = () => tab("dir");
+$("tab-res").onclick = () => tab("res");
+$("tab-me").onclick = () => tab("me");
+
+async function openApp(user){
+  show("v-app");
+  const canList = isExecAdmin || (profile && profile.type === "alumni");
+  $("tab-me").hidden = !canList;
+  const [a, r] = await Promise.all([getDocs(collection(db, "alumni")), getDocs(collection(db, "resources"))]);
+  alumni = a.docs.map(d => ({ id: d.id, ...d.data() }));
+  resources = r.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderDir(); renderResChips(); renderRes();
+  if (canList) fillMe(user);
+}
+
+function renderDir(){
+  const q = $("dir-q").value.trim().toLowerCase(), ind = $("dir-industry").value, mentor = $("dir-mentor").checked;
+  const list = alumni
+    .filter(a => !ind || a.industry === ind)
+    .filter(a => !mentor || a.mentor)
+    .filter(a => !q || [a.name, a.company, a.role, a.city, a.sport, a.program, a.industry].join(" ").toLowerCase().includes(q))
+    .sort((x, y) => (y.gradYear || 0) - (x.gradYear || 0) || String(x.name).localeCompare(y.name));
+  $("dir-count").textContent = alumni.length
+    ? `${list.length} of ${alumni.length} alumni`
+    : "";
+  $("dir-list").innerHTML = list.length ? list.map(a => `
+    <article class="al">
+      <div class="al-top">
+        <div class="al-av" aria-hidden="true">${esc(initials(a.name))}</div>
+        <div><div class="al-name">${esc(a.name)}</div><div class="al-sub">${[a.gradYear ? "Class of " + a.gradYear : "", a.sport].filter(Boolean).map(esc).join(" · ")}</div></div>
+      </div>
+      ${a.role || a.company ? `<div class="al-job">${esc(a.role || "")}${a.role && a.company ? " <span>at</span> " : ""}${esc(a.company || "")}</div>` : ""}
+      <div class="al-meta">
+        ${a.industry ? `<span class="tag">${esc(a.industry)}</span>` : ""}
+        ${a.city ? `<span class="tag">${esc(a.city)}</span>` : ""}
+        ${a.mentor ? `<span class="tag red">Open to mentoring</span>` : ""}
+      </div>
+      ${a.bio ? `<p class="al-bio">${esc(a.bio)}</p>` : ""}
+      <div class="al-actions">
+        ${a.linkedin ? `<a class="btn btn-line btn-sm" href="${esc(a.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ""}
+        ${a.email ? `<a class="btn btn-line btn-sm" href="mailto:${esc(a.email)}">${esc(a.email)}</a>` : ""}
+      </div>
+    </article>`).join("")
+    : `<div class="empty" style="grid-column:1/-1">${alumni.length ? "No alumni match those filters." : "No alumni have added a profile yet. Alumni can add theirs under My directory profile."}</div>`;
+}
+["dir-q", "dir-industry", "dir-mentor"].forEach(id => $(id).addEventListener("input", renderDir));
+
+function renderResChips(){
+  const cats = ["All", ...[...new Set(resources.map(r => r.category).filter(Boolean))].sort()];
+  $("res-chips").innerHTML = cats.map(c => `<button type="button" class="chip" aria-pressed="${c === resFilter}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+  $("res-chips").querySelectorAll(".chip").forEach(b => b.onclick = () => { resFilter = b.dataset.c; renderResChips(); renderRes(); });
+}
+function renderRes(){
+  const q = $("res-q").value.trim().toLowerCase();
+  const list = resources
+    .filter(r => resFilter === "All" || r.category === resFilter)
+    .filter(r => !q || [r.title, r.description, r.category].join(" ").toLowerCase().includes(q))
+    .sort((a, b) => String(a.category).localeCompare(b.category) || String(a.title).localeCompare(b.title));
+  $("res-list").innerHTML = list.length ? list.map(r => `
+    <article class="res">
+      <div>${r.category ? `<span class="tag red">${esc(r.category)}</span>` : ""}<h3>${esc(r.title)}</h3>${r.description ? `<p>${esc(r.description)}</p>` : ""}</div>
+      <a class="btn btn-red btn-sm" href="${esc(r.url)}" target="_blank" rel="noopener">Open</a>
+    </article>`).join("")
+    : `<div class="empty">${resources.length ? "No resources match that search." : "No resources have been added yet. Execs add them from the exec portal."}</div>`;
+}
+$("res-q").addEventListener("input", renderRes);
+
+// ---------- My directory profile ----------
+function fillMe(user){
+  const mine = alumni.find(a => a.id === user.uid);
+  const d = mine || { name: (profile && profile.name) || user.displayName || "", gradYear: profile && profile.gradYear };
+  $("m-name").value = d.name || ""; $("m-year").value = d.gradYear || "";
+  $("m-sport").value = d.sport || ""; $("m-program").value = d.program || "";
+  $("m-company").value = d.company || ""; $("m-role").value = d.role || "";
+  $("m-industry").value = d.industry || ""; $("m-city").value = d.city || "";
+  $("m-linkedin").value = d.linkedin || ""; $("m-email").value = d.email || "";
+  $("m-mentor").checked = !!d.mentor; $("m-bio").value = d.bio || "";
+  $("m-remove").hidden = !mine;
+}
+$("me-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const user = auth.currentUser;
+  const data = {
+    name: $("m-name").value.trim(), gradYear: year($("m-year").value),
+    sport: $("m-sport").value.trim(), program: $("m-program").value.trim(),
+    company: $("m-company").value.trim(), role: $("m-role").value.trim(),
+    industry: $("m-industry").value, city: $("m-city").value.trim(),
+    linkedin: $("m-linkedin").value.trim(), email: $("m-email").value.trim(),
+    mentor: $("m-mentor").checked, bio: $("m-bio").value.trim(), updatedAt: serverTimestamp()
+  };
+  if (!data.name) return setStatus($("me-status"), "err", "Enter your name.");
+  if (data.email && !EMAIL.test(data.email)) return setStatus($("me-status"), "err", "That email address doesn't look right.");
+  if (data.linkedin && !LINKEDIN.test(data.linkedin)) return setStatus($("me-status"), "err", "LinkedIn links need to start with https://www.linkedin.com/");
+  $("m-save").disabled = true;
+  try {
+    await setDoc(doc(db, "alumni", user.uid), data);
+    const i = alumni.findIndex(a => a.id === user.uid);
+    const row = { id: user.uid, ...data };
+    if (i >= 0) alumni[i] = row; else alumni.push(row);
+    renderDir(); $("m-remove").hidden = false;
+    setStatus($("me-status"), "ok", "Saved. You're listed in the Alumni Directory.");
+  } catch (err) { setStatus($("me-status"), "err", friendly(err)); }
+  $("m-save").disabled = false;
+});
+$("m-remove").onclick = async () => {
+  const b = $("m-remove");
+  if (b.dataset.confirm !== "1") { b.dataset.confirm = "1"; b.textContent = "Click again to remove your listing"; return; }
+  delete b.dataset.confirm; b.textContent = "Remove me from the directory";
+  try {
+    await deleteDoc(doc(db, "alumni", auth.currentUser.uid));
+    alumni = alumni.filter(a => a.id !== auth.currentUser.uid);
+    renderDir(); b.hidden = true;
+    setStatus($("me-status"), "ok", "You've been removed from the directory.");
+  } catch (err) { setStatus($("me-status"), "err", friendly(err)); }
+};
+</script>
+</body>
+</html>
