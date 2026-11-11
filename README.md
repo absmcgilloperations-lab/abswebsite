@@ -24,6 +24,7 @@ Execs sign in with Google at `/edit.html` (also linked as "Exec login" in the fo
 - **Admins** can edit anyone's card, add or remove people, and manage who can sign in under "Who can sign in".
 - **To add a new exec:** add them under Team ("Add a person"), then give their Google email access and link it to their card.
 - **Headshots** are still files in `assets/team/`. Upload the photo to the repo, then set the file name on the person's card.
+- **Replacing a headshot:** save it under a new file name (e.g. `emma-sutton-2.jpg`) and update the Photo file on their card. Reusing the old name can leave visitors seeing the old photo, because browsers keep images for a while. Photos must be real JPEGs: iPhone HEIC files named `.jpg` won't show in Chrome.
 - If the database can't be reached, the Team section falls back to `team.js`. Keep it roughly in sync at handover.
 
 ## Members area (members.html)
